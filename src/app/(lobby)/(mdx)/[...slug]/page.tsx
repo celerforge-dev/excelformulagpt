@@ -32,8 +32,12 @@ interface Metadata {
   description: string;
 }
 
-export default async function Page({ params }: { params: { slug: string[] } }) {
-  const slugPath = (await params).slug.join("/");
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const slugPath = (await params).slug;
   const markdown = await readPageFile(slugPath);
 
   if (!markdown) {

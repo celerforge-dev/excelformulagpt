@@ -4,7 +4,6 @@ import { MdxCard } from "@/components/mdx/mdx-card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "@/lib/utils";
-import { MDXComponents } from "mdx/types";
 import Image from "next/image";
 
 /** Originally from `shadcn/ui-docs`
