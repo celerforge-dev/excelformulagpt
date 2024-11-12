@@ -2,6 +2,7 @@
 
 import { signOut } from "@/actions/auth";
 import { Icons } from "@/components/icons";
+import ThemeSwitch from "@/components/theme-switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -11,17 +12,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
-import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -56,7 +49,6 @@ type UserDropdownMenuProps = {
 
 export function UserDropdownMenu({ user }: UserDropdownMenuProps) {
   const pathname = usePathname();
-  const { setTheme, theme, themes } = useTheme();
   async function signOutHandler() {
     await signOut({ redirectTo: "/sign-in" });
   }
@@ -80,15 +72,6 @@ export function UserDropdownMenu({ user }: UserDropdownMenuProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="mb-1 h-8">
           <Link
-            href="https://github.com/celerforge/excelformulagpt/issues"
-            target="_blank"
-            className="flex justify-between"
-          >
-            <span className="mr-5">Issues</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="mb-1 h-8">
-          <Link
             href="/"
             target="_blank"
             className={cn(
@@ -101,20 +84,7 @@ export function UserDropdownMenu({ user }: UserDropdownMenuProps) {
         </DropdownMenuItem>
         <div className="flex items-center justify-between px-2 text-sm">
           <span className="cursor-default text-foreground">Theme</span>
-          <Select defaultValue={theme} onValueChange={(v) => setTheme(v)}>
-            <SelectTrigger className="focus:ring-none h-8 w-20 p-0 pl-2 focus:ring-0">
-              {theme}
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {themes.map((theme) => (
-                  <SelectItem key={theme} value={theme}>
-                    {theme}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <ThemeSwitch />
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem

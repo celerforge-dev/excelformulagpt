@@ -1,10 +1,10 @@
-import { ThemeProvider } from "@/components/theme-provider";
 import { siteConfig } from "@/config/site";
 import { auth } from "@/lib/auth";
 import "@/styles/globals.css";
 import "@/styles/mdx.css";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: siteConfig.name,
