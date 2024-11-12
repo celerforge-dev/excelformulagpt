@@ -29,4 +29,5 @@ export const siteConfig = {
     "Excel formula AI assistant"
   ],
   twitter: "https://twitter.com/chaoying972",
+  domain: "excelformulagpt.com",
 };
