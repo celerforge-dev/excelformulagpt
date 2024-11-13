@@ -42,7 +42,7 @@ const footerNav = [
 
 export function Footer() {
   return (
-    <footer className="container border-t py-16">
+    <footer className="container border-t bg-background py-16">
       <nav className="grid grid-cols-12 gap-8 md:gap-3">
         {footerNav.map((linkBlock, index) => (
           <div className="col-span-6 md:col-span-3" key={index}>
