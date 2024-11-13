@@ -14,7 +14,6 @@ export const env = createEnv({
     AUTH_GITHUB_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
-
   },
   /*
    * Environment variables available on the client (and server).
