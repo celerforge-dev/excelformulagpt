@@ -1,5 +1,6 @@
 import {
   ArrowRight,
+  Copy,
   ExternalLink,
   Github,
   LucideIcon,
@@ -34,4 +35,5 @@ export const Icons: Record<string, Icon> = {
   refreshCw: RefreshCw,
   arrowRight: ArrowRight,
   externalLink: ExternalLink,
+  copy: Copy,
 };
