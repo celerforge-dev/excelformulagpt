@@ -1,10 +1,8 @@
 "use client";
 
 import { signOut } from "@/actions/auth";
-import { Icons } from "@/components/icons";
 import ThemeSwitch from "@/components/theme-switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,34 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-export function UserMenu() {
-  const { data: session } = useSession();
-  return session?.user ? (
-    <UserDropdownMenu user={session.user} />
-  ) : (
-    <div className="flex items-center gap-2">
-      <Link
-        href="/sign-in"
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          "hover:bg-background/70",
-        )}
-      >
-        Sign in
-      </Link>
-      <Link href="/sign-up" className={cn(buttonVariants(), "rounded-full")}>
-        <div className="flex items-center gap-1">
-          <span>Sign up</span>
-          <Icons.arrowRight size={16} />
-        </div>
-      </Link>
-    </div>
-  );
-}
 
 type UserDropdownMenuProps = {
   user: NonNullable<Session["user"]>;

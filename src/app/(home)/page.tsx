@@ -1,27 +1,26 @@
-import { FormulaPrompt } from "@/app/(home)/formula-prompt";
-import { FormulaResult } from "@/app/(home)/formula-result";
+"use client";
+
+import { FormulaSection } from "@/app/(home)/formula-section";
+import { HomeHeader } from "@/app/(home)/header";
 import { Footer } from "@/components/footer";
-import Header from "@/components/header";
 
 export default function Home() {
   return (
     <>
       <div className="min-h-screen">
-        <Header />
-        <main className="container mx-auto mt-24 max-w-5xl px-4">
-          <div className="rounded-xl border bg-white p-6 shadow-sm">
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-              <div>
-                <h2 className="mb-4 text-xl font-medium">
-                  Generate Excel Formula
-                </h2>
-                <FormulaPrompt />
-              </div>
-              <div>
-                <h2 className="mb-4 text-xl font-medium">Result</h2>
-                <FormulaResult />
-              </div>
+        <HomeHeader />
+        <main className="container">
+          <div className="my-24">
+            <div className="mx-auto max-w-2xl text-center">
+              <h1 className="text-[3.35rem] font-semibold leading-[1.2]">
+                AI Excel Formula Generator
+              </h1>
+              <h2 className="mt-5 text-xl text-gray-600">
+                Describe in words, get formulas instantly. Free & accurate. Turn
+                your descriptions into working Excel formulas in seconds.
+              </h2>
             </div>
+            <FormulaSection />
           </div>
         </main>
       </div>

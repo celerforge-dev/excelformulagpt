@@ -1,8 +1,11 @@
 import {
   ArrowRight,
+  Check,
   Copy,
+  CornerDownLeft,
   ExternalLink,
   Github,
+  Loader,
   LucideIcon,
   LucideProps,
   RefreshCw,
@@ -36,4 +39,7 @@ export const Icons: Record<string, Icon> = {
   arrowRight: ArrowRight,
   externalLink: ExternalLink,
   copy: Copy,
+  cornerDownLeft: CornerDownLeft,
+  check: Check,
+  loader: Loader,
 };

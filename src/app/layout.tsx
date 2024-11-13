@@ -1,5 +1,9 @@
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { siteConfig } from "@/config/site";
 import { auth } from "@/lib/auth";
+import { fontSans } from "@/lib/fonts";
+import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 import "@/styles/mdx.css";
 import type { Metadata } from "next";
@@ -21,10 +25,13 @@ export default async function RootLayout({
   return (
     <html suppressHydrationWarning>
       <head />
-      <body>
+      <body
+        className={cn("bg-background font-sans antialiased", fontSans.variable)}
+      >
         <SessionProvider session={session}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
+            <TooltipProvider>{children}</TooltipProvider>
+            <Toaster richColors />
           </ThemeProvider>
         </SessionProvider>
       </body>

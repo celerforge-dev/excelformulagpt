@@ -1,30 +1,112 @@
 "use client";
 
+import { FormulaRecord, useFormula } from "@/app/(home)/formula-context";
+import { CopyButton } from "@/components/copy-button";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import TimeAgo from "react-timeago";
 
-interface FormulaResultProps {
-  result?: string;
-  onClear?: () => void;
-  onCopy?: () => void;
+interface FormulaCardProps {
+  prompt: string;
+  timestamp?: React.ReactNode;
+  actions?: React.ReactNode;
+  result: React.ReactNode;
 }
 
-export function FormulaResult({ result, onClear, onCopy }: FormulaResultProps) {
+function FormulaResultCard({
+  prompt,
+  timestamp,
+  actions,
+  result,
+}: FormulaCardProps) {
   return (
-    <div className="space-y-4">
-      <div className="min-h-[200px] rounded-lg border bg-white p-4">
-        {result}
-      </div>
-      <div className="flex gap-4">
-        <Button variant="outline" className="flex-1" onClick={onClear}>
-          <Icons.refreshCw className="mr-2 h-4 w-4" />
-          CLEAR
-        </Button>
-        <Button variant="outline" className="flex-1" onClick={onCopy}>
-          <Icons.copy className="mr-2 h-4 w-4" />
-          COPY
-        </Button>
+    <div className="mt-2">
+      <div className="rounded-lg border bg-white p-3 shadow-md">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <div className="text-sm font-medium">Excel Formula</div>
+              <span className="text-xs text-gray-500">{timestamp}</span>
+            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="cursor-default text-xs text-gray-500">
+                    {prompt?.slice(0, 40)}...
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs text-xs">{prompt}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          <div className="flex items-center gap-0.5">{actions}</div>
+        </div>
+        <div className="mt-2 rounded border bg-gray-50/50 p-2 font-mono text-sm">
+          {result}
+        </div>
       </div>
     </div>
+  );
+}
+
+export function FormulaResultSkeleton({ prompt }: { prompt: string }) {
+  const actions = (
+    <>
+      <div className="h-7 w-7 animate-pulse rounded bg-gray-200" />
+      <div className="h-7 w-7 animate-pulse rounded bg-gray-200" />
+    </>
+  );
+
+  return (
+    <FormulaResultCard
+      prompt={prompt}
+      timestamp={<div className="h-3 w-16 animate-pulse rounded bg-gray-200" />}
+      actions={actions}
+      result={<div className="h-5 animate-pulse rounded bg-gray-200" />}
+    />
+  );
+}
+
+interface FormulaResultProps {
+  record: FormulaRecord;
+}
+
+export function FormulaResult({ record }: FormulaResultProps) {
+  const { setPrompt } = useFormula();
+
+  const actions = (
+    <>
+      <CopyButton
+        value={record.result}
+        variant="ghost"
+        size="sm"
+        className="h-7 w-7 p-0"
+      />
+      <Button
+        variant="ghost"
+        size="sm"
+        className="h-7 w-7 p-0"
+        onClick={() => setPrompt(record.prompt)}
+      >
+        <Icons.refreshCw className="h-3.5 w-3.5" />
+      </Button>
+    </>
+  );
+
+  return (
+    <FormulaResultCard
+      prompt={record.prompt}
+      timestamp={<TimeAgo date={record.timestamp} live={false} />}
+      actions={actions}
+      result={record.result}
+    />
   );
 }
