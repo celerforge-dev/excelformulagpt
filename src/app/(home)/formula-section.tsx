@@ -8,11 +8,11 @@ import {
 } from "@/app/(home)/formula-result";
 
 function FormulaResultList() {
-  const { records, isLoading, currentPrompt } = useFormula();
+  const { records, isLoading, prompt } = useFormula();
 
   return (
     <>
-      {isLoading && <FormulaResultSkeleton prompt={currentPrompt} />}
+      {isLoading && <FormulaResultSkeleton prompt={prompt} />}
       {records.map((record) => (
         <FormulaResult record={record} key={record.timestamp} />
       ))}

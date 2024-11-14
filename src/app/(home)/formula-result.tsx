@@ -28,7 +28,7 @@ function FormulaResultCard({
   return (
     <div className="mt-2">
       <div className="rounded-lg border bg-white p-3 shadow-md">
-        <div className="flex items-center justify-between">
+        <div className="flex justify-between">
           <div>
             <div className="flex items-center gap-2">
               <div className="text-sm font-medium">Excel Formula</div>
@@ -37,9 +37,9 @@ function FormulaResultCard({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <div className="cursor-default text-xs text-gray-500">
-                    {prompt?.slice(0, 40)}...
-                  </div>
+                  <span className="cursor-default text-xs text-gray-500">
+                    {prompt?.length > 40 ? `${prompt.slice(0, 40)}...` : prompt}
+                  </span>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="max-w-xs text-xs">{prompt}</p>
@@ -47,7 +47,7 @@ function FormulaResultCard({
               </Tooltip>
             </TooltipProvider>
           </div>
-          <div className="flex items-center gap-0.5">{actions}</div>
+          <div className="flex gap-0.5">{actions}</div>
         </div>
         <div className="mt-2 rounded border bg-gray-50/50 p-2 font-mono text-sm">
           {result}
@@ -60,8 +60,8 @@ function FormulaResultCard({
 export function FormulaResultSkeleton({ prompt }: { prompt: string }) {
   const actions = (
     <>
-      <div className="h-7 w-7 animate-pulse rounded bg-gray-200" />
-      <div className="h-7 w-7 animate-pulse rounded bg-gray-200" />
+      <div className="mr-2 h-6 w-6 animate-pulse rounded bg-gray-200" />
+      <div className="h-6 w-6 animate-pulse rounded bg-gray-200" />
     </>
   );
 
@@ -88,12 +88,12 @@ export function FormulaResult({ record }: FormulaResultProps) {
         value={record.result}
         variant="ghost"
         size="sm"
-        className="h-7 w-7 p-0"
+        className="h-7 w-7 p-0 text-secondary-foreground"
       />
       <Button
         variant="ghost"
         size="sm"
-        className="h-7 w-7 p-0"
+        className="h-7 w-7 p-0 text-secondary-foreground"
         onClick={() => setPrompt(record.prompt)}
       >
         <Icons.refreshCw className="h-3.5 w-3.5" />

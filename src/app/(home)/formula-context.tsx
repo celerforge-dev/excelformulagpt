@@ -10,18 +10,23 @@ export interface FormulaRecord {
 
 interface FormulaContextType {
   records: FormulaRecord[];
-  addRecord: (prompt: string, result: string) => void;
+  prompt: string;
   setPrompt: (prompt: string) => void;
-  currentPrompt: string;
   isLoading: boolean;
-  setIsLoading: (loading: boolean) => void;
+  submitPrompt: () => Promise<string>;
 }
 
 const FormulaContext = createContext<FormulaContextType | undefined>(undefined);
 
-export function FormulaProvider({ children }: { children: React.ReactNode }) {
+export function FormulaProvider({
+  children,
+  maxRecords = 5,
+}: {
+  children: React.ReactNode;
+  maxRecords?: number;
+}) {
   const [records, setRecords] = useState<FormulaRecord[]>([]);
-  const [currentPrompt, setCurrentPrompt] = useState("");
+  const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -37,21 +42,37 @@ export function FormulaProvider({ children }: { children: React.ReactNode }) {
       result,
       timestamp: Date.now(),
     };
-    setCurrentPrompt(prompt);
-    const updatedRecords = [newRecord, ...records].slice(0, 5);
+    const updatedRecords = [newRecord, ...records].slice(0, maxRecords);
     setRecords(updatedRecords);
     localStorage.setItem("formula-records", JSON.stringify(updatedRecords));
+  };
+
+  const submitPrompt = async () => {
+    const trimmedPrompt = prompt.trim();
+    if (!trimmedPrompt) {
+      throw new Error("Please enter a valid prompt");
+    }
+
+    try {
+      setIsLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const result = `=MOCK(${trimmedPrompt})`;
+      addRecord(trimmedPrompt, result);
+      setPrompt("");
+      return result;
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <FormulaContext.Provider
       value={{
         records,
-        addRecord,
-        currentPrompt,
-        setPrompt: setCurrentPrompt,
+        prompt,
+        setPrompt,
         isLoading,
-        setIsLoading,
+        submitPrompt,
       }}
     >
       {children}
