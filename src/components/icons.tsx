@@ -1,9 +1,11 @@
 import {
   ArrowRight,
   Check,
+  CirclePlus,
   Copy,
   CornerDownLeft,
   ExternalLink,
+  FileUp,
   Github,
   Loader,
   LucideIcon,
@@ -42,4 +44,6 @@ export const Icons: Record<string, Icon> = {
   cornerDownLeft: CornerDownLeft,
   check: Check,
   loader: Loader,
+  circlePlus: CirclePlus,
+  fileUp: FileUp,
 };

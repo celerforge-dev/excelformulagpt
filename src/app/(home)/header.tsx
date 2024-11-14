@@ -22,14 +22,9 @@ const LINKS = [
     regex: "^/pricing$",
   },
   {
-    title: "Issues",
-    href: "/issues",
-    regex: "^/issues",
-  },
-  {
-    title: "Blog",
-    href: "/blog",
-    regex: "^/Blog",
+    title: "Feedback",
+    href: "/https://github.com/celerforge/excelformulagpt/issues",
+    regex: "^/feedback",
   },
 ];
 
