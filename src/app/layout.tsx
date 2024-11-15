@@ -1,3 +1,4 @@
+import { CSPostHogProvider } from "@/components/post-hog-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { siteConfig } from "@/config/site";
@@ -25,16 +26,21 @@ export default async function RootLayout({
   return (
     <html suppressHydrationWarning>
       <head />
-      <body
-        className={cn("bg-background font-sans antialiased", fontSans.variable)}
-      >
-        <SessionProvider session={session}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <TooltipProvider>{children}</TooltipProvider>
-            <Toaster richColors />
-          </ThemeProvider>
-        </SessionProvider>
-      </body>
+      <CSPostHogProvider>
+        <body
+          className={cn(
+            "bg-background font-sans antialiased",
+            fontSans.variable,
+          )}
+        >
+          <SessionProvider session={session}>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <TooltipProvider>{children}</TooltipProvider>
+              <Toaster richColors />
+            </ThemeProvider>
+          </SessionProvider>
+        </body>
+      </CSPostHogProvider>
     </html>
   );
 }

@@ -32,7 +32,9 @@ function FormulaResultCard({
           <div>
             <div className="flex items-center gap-2">
               <div className="text-sm font-medium">Excel Formula</div>
-              <span className="text-xs text-gray-500">{timestamp}</span>
+              <span className="text-xs text-secondary-foreground">
+                {timestamp}
+              </span>
             </div>
             <TooltipProvider>
               <Tooltip>
@@ -49,7 +51,7 @@ function FormulaResultCard({
           </div>
           <div className="flex gap-0.5">{actions}</div>
         </div>
-        <div className="mt-2 rounded border bg-gray-50/50 p-2 font-mono text-sm">
+        <div className="mt-2 rounded border bg-secondary p-2 font-mono text-sm">
           {result}
         </div>
       </div>

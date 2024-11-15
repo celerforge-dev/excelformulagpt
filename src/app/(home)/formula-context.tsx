@@ -1,5 +1,6 @@
 "use client";
 
+import { ExcelData } from "@/app/(home)/excel-parser";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface FormulaRecord {
@@ -13,6 +14,8 @@ interface FormulaContextType {
   prompt: string;
   setPrompt: (prompt: string) => void;
   isLoading: boolean;
+  excelData: ExcelData | null;
+  setExcelData: (data: ExcelData | null) => void;
   submitPrompt: () => Promise<string>;
 }
 
@@ -28,6 +31,7 @@ export function FormulaProvider({
   const [records, setRecords] = useState<FormulaRecord[]>([]);
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [excelData, setExcelData] = useState<ExcelData | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("formula-records");
@@ -56,7 +60,9 @@ export function FormulaProvider({
     try {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 1500));
+
       const result = `=MOCK(${trimmedPrompt})`;
+
       addRecord(trimmedPrompt, result);
       setPrompt("");
       return result;
@@ -72,6 +78,8 @@ export function FormulaProvider({
         prompt,
         setPrompt,
         isLoading,
+        excelData,
+        setExcelData,
         submitPrompt,
       }}
     >
