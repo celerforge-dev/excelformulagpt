@@ -1,4 +1,5 @@
 import { ExcelData, ExcelParser } from "@/app/(home)/excel-parser";
+import { useFormula } from "@/app/(home)/formula-context";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,17 +8,20 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { toast } from "sonner";
 
-type ExcelUploadProps = {
-  onFileLoaded: (data: ExcelData) => void;
-  onFileRemoved: () => void;
-};
-
-export function ExcelUpload({ onFileLoaded, onFileRemoved }: ExcelUploadProps) {
-  const [fileName, setFileName] = useState<string | null>(null);
+export function ExcelUploader() {
+  const { setData, data } = useFormula();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const onFileLoaded = (result: ExcelData) => {
+    setData(result);
+  };
+
+  const onFileRemoved = () => {
+    setData(null);
+  };
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -28,7 +32,6 @@ export function ExcelUpload({ onFileLoaded, onFileRemoved }: ExcelUploadProps) {
     try {
       const result = await ExcelParser.parse(file);
       onFileLoaded(result);
-      setFileName(file.name);
       toast.success(`Successfully loaded "${file.name}"`);
       event.target.value = "";
     } catch (error) {
@@ -39,7 +42,6 @@ export function ExcelUpload({ onFileLoaded, onFileRemoved }: ExcelUploadProps) {
   };
 
   const clearFile = () => {
-    setFileName(null);
     onFileRemoved();
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -55,9 +57,11 @@ export function ExcelUpload({ onFileLoaded, onFileRemoved }: ExcelUploadProps) {
         onChange={handleFileUpload}
         className="hidden"
       />
-      {fileName ? (
+      {data ? (
         <div className="flex items-center gap-1 rounded-md bg-secondary px-2 py-1">
-          <span className="text-xs text-secondary-foreground">{fileName}</span>
+          <span className="text-xs text-secondary-foreground">
+            {data.fileName || "Uploaded file"}
+          </span>
           <Button
             type="button"
             variant="ghost"

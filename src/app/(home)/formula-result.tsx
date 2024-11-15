@@ -13,14 +13,14 @@ import {
 import TimeAgo from "react-timeago";
 
 interface FormulaCardProps {
-  prompt: string;
+  input: string;
   timestamp?: React.ReactNode;
   actions?: React.ReactNode;
   result: React.ReactNode;
 }
 
 function FormulaResultCard({
-  prompt,
+  input,
   timestamp,
   actions,
   result,
@@ -40,11 +40,11 @@ function FormulaResultCard({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span className="cursor-default text-xs text-gray-500">
-                    {prompt?.length > 40 ? `${prompt.slice(0, 40)}...` : prompt}
+                    {input?.length > 40 ? `${input.slice(0, 40)}...` : input}
                   </span>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="max-w-xs text-xs">{prompt}</p>
+                  <p className="max-w-xs text-xs">{input}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -59,7 +59,7 @@ function FormulaResultCard({
   );
 }
 
-export function FormulaResultSkeleton({ prompt }: { prompt: string }) {
+export function FormulaResultSkeleton({ input }: { input: string }) {
   const actions = (
     <>
       <div className="mr-2 h-6 w-6 animate-pulse rounded bg-gray-200" />
@@ -69,7 +69,7 @@ export function FormulaResultSkeleton({ prompt }: { prompt: string }) {
 
   return (
     <FormulaResultCard
-      prompt={prompt}
+      input={input}
       timestamp={<div className="h-3 w-16 animate-pulse rounded bg-gray-200" />}
       actions={actions}
       result={<div className="h-5 animate-pulse rounded bg-gray-200" />}
@@ -82,7 +82,7 @@ interface FormulaResultProps {
 }
 
 export function FormulaResult({ record }: FormulaResultProps) {
-  const { setPrompt } = useFormula();
+  const { setInput, setData } = useFormula();
 
   const actions = (
     <>
@@ -96,7 +96,10 @@ export function FormulaResult({ record }: FormulaResultProps) {
         variant="ghost"
         size="sm"
         className="h-7 w-7 p-0 text-secondary-foreground"
-        onClick={() => setPrompt(record.prompt)}
+        onClick={() => {
+          setInput(record.input);
+          setData(record.data);
+        }}
       >
         <Icons.refreshCw className="h-3.5 w-3.5" />
       </Button>
@@ -105,7 +108,7 @@ export function FormulaResult({ record }: FormulaResultProps) {
 
   return (
     <FormulaResultCard
-      prompt={record.prompt}
+      input={record.input}
       timestamp={<TimeAgo date={record.timestamp} live={false} />}
       actions={actions}
       result={record.result}

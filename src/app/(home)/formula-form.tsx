@@ -1,10 +1,16 @@
 "use client";
 
-import { ExcelUpload } from "@/app/(home)/excel-upload";
+import { ExcelUploader } from "@/app/(home)/excel-uploader";
 import { useFormula } from "@/app/(home)/formula-context";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,31 +20,37 @@ import { toast } from "sonner";
 import * as z from "zod";
 
 const formSchema = z.object({
-  prompt: z.string().min(1, "prompt is required."),
+  input: z
+    .string()
+    .min(1, "Input is required.")
+    .max(500, "Input cannot exceed 500 characters.")
+    .refine(
+      (value) => value.trim().length > 0,
+      "Input cannot be empty or only whitespace.",
+    ),
   excelFile: z.instanceof(File).optional(),
 });
 
-export function FormulaPrompt({ className }: { className?: string }) {
-  const { prompt, setPrompt, submitPrompt, isLoading, setExcelData } =
-    useFormula();
+export function FormulaForm({ className }: { className?: string }) {
+  const { input, setInput, generate, isLoading } = useFormula();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      prompt: "",
+      input: "",
       excelFile: undefined,
     },
   });
 
   useEffect(() => {
-    form.setValue("prompt", prompt);
-  }, [prompt, form]);
+    form.setValue("input", input);
+  }, [input, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (isLoading) return;
-    setPrompt(values.prompt);
+    setInput(values.input);
     try {
-      await submitPrompt();
+      await generate();
       toast.success("Formula generated successfully.");
     } catch (error) {
       toast.error(
@@ -91,7 +103,7 @@ export function FormulaPrompt({ className }: { className?: string }) {
           </div>
           <FormField
             control={form.control}
-            name="prompt"
+            name="input"
             render={({ field }) => (
               <FormItem className="flex-1">
                 <FormControl>
@@ -99,7 +111,7 @@ export function FormulaPrompt({ className }: { className?: string }) {
                     {...field}
                     onChange={(e) => {
                       field.onChange(e);
-                      setPrompt(e.target.value);
+                      setInput(e.target.value);
                     }}
                     placeholder="Enter formula request (e.g., 'Average of B where A > 100'). Click bottom left to upload file for better AI understanding."
                     className="focus border-none pb-12 pt-3 font-normal placeholder:text-gray-400 focus:outline-none focus-visible:outline-none focus-visible:ring-0"
@@ -113,16 +125,14 @@ export function FormulaPrompt({ className }: { className?: string }) {
                     }}
                   />
                 </FormControl>
+                <FormMessage className="absolute right-3 top-0" />
               </FormItem>
             )}
           />
         </div>
 
         <div className="absolute bottom-0 flex items-center gap-2">
-          <ExcelUpload
-            onFileLoaded={setExcelData}
-            onFileRemoved={() => setExcelData(null)}
-          />
+          <ExcelUploader />
         </div>
 
         <Button

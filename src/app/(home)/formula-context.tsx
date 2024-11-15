@@ -1,22 +1,27 @@
 "use client";
 
+import { generateExcelFormula } from "@/actions/ai";
 import { ExcelData } from "@/app/(home)/excel-parser";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface FormulaRecord {
-  prompt: string;
+  input: string;
   result: string;
   timestamp: number;
+  data: ExcelData | null;
 }
 
-interface FormulaContextType {
+export interface FormulaPrompt {
+  input: string;
+  data: ExcelData | null;
+}
+
+interface FormulaContextType extends FormulaPrompt {
   records: FormulaRecord[];
-  prompt: string;
-  setPrompt: (prompt: string) => void;
+  setInput: (input: string) => void;
   isLoading: boolean;
-  excelData: ExcelData | null;
-  setExcelData: (data: ExcelData | null) => void;
-  submitPrompt: () => Promise<string>;
+  setData: (data: ExcelData | null) => void;
+  generate: () => Promise<string>;
 }
 
 const FormulaContext = createContext<FormulaContextType | undefined>(undefined);
@@ -29,9 +34,9 @@ export function FormulaProvider({
   maxRecords?: number;
 }) {
   const [records, setRecords] = useState<FormulaRecord[]>([]);
-  const [prompt, setPrompt] = useState("");
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [excelData, setExcelData] = useState<ExcelData | null>(null);
+  const [data, setData] = useState<ExcelData | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("formula-records");
@@ -40,47 +45,52 @@ export function FormulaProvider({
     }
   }, []);
 
-  const addRecord = (prompt: string, result: string) => {
+  function addRecord(
+    promptInput: string,
+    formulaResult: string,
+    excelData: ExcelData | null,
+  ) {
     const newRecord = {
-      prompt,
-      result,
+      input: promptInput,
+      result: formulaResult,
       timestamp: Date.now(),
+      data: excelData,
     };
     const updatedRecords = [newRecord, ...records].slice(0, maxRecords);
     setRecords(updatedRecords);
     localStorage.setItem("formula-records", JSON.stringify(updatedRecords));
-  };
+  }
 
-  const submitPrompt = async () => {
-    const trimmedPrompt = prompt.trim();
-    if (!trimmedPrompt) {
-      throw new Error("Please enter a valid prompt");
-    }
-
+  async function generate() {
     try {
       setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const { formula, error } = await generateExcelFormula({
+        input,
+        data,
+      });
 
-      const result = `=MOCK(${trimmedPrompt})`;
+      if (error) {
+        throw new Error(error);
+      }
 
-      addRecord(trimmedPrompt, result);
-      setPrompt("");
-      return result;
+      addRecord(input, formula, data);
+      setInput("");
+      return formula;
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return (
     <FormulaContext.Provider
       value={{
         records,
-        prompt,
-        setPrompt,
+        input,
+        setInput,
         isLoading,
-        excelData,
-        setExcelData,
-        submitPrompt,
+        data,
+        setData,
+        generate,
       }}
     >
       {children}
