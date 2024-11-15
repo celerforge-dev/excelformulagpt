@@ -11,6 +11,7 @@ import {
   LucideIcon,
   LucideProps,
   RefreshCw,
+  X,
 } from "lucide-react";
 import { FC, SVGProps } from "react";
 
@@ -46,4 +47,5 @@ export const Icons: Record<string, Icon> = {
   loader: Loader,
   circlePlus: CirclePlus,
   fileUp: FileUp,
+  x: X,
 };
