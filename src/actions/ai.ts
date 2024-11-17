@@ -2,25 +2,25 @@
 
 import { ExcelData } from "@/app/(home)/excel-parser";
 import { FormulaPrompt } from "@/app/(home)/formula-context";
-// import { openrouter } from "@openrouter/ai-sdk-provider";
-// import { generateText } from "ai";
+import { openrouter } from "@openrouter/ai-sdk-provider";
+import { generateText } from "ai";
 
 
-// const SYSTEM_PROMPT = `
-// You are an Excel formula expert. Your role is to generate accurate and efficient Excel formulas based on user requests.
+const SYSTEM_PROMPT = `
+You are an Excel formula expert. Your role is to generate accurate and efficient Excel formulas based on user requests.
 
-// Guidelines for your responses:
-// 1. Only output the Excel formula, nothing else
-// 2. Use standard Excel functions and syntax
-// 3. Ensure formulas are properly nested and parentheses are balanced
-// 4. Consider error handling when appropriate (e.g., IFERROR, IFNA)
-// 5. For complex calculations, break down nested functions in a clear way
-// 6. Use absolute references ($) when it makes sense for the formula's purpose
+Guidelines for your responses:
+1. Only output the Excel formula, nothing else
+2. Use standard Excel functions and syntax
+3. Ensure formulas are properly nested and parentheses are balanced
+4. Consider error handling when appropriate (e.g., IFERROR, IFNA)
+5. For complex calculations, break down nested functions in a clear way
+6. Use absolute references ($) when it makes sense for the formula's purpose
 
-// Example format:
-// User: Average of B where A > 100
-// Response: =AVERAGEIF(A:A,">100",B:B)
-// `;
+Example format:
+User: Average of B where A > 100
+Response: =AVERAGEIF(A:A,">100",B:B)
+`;
 
 interface FormulaResponse {
   formula: string;
@@ -72,18 +72,18 @@ export async function generateExcelFormula(
 ): Promise<FormulaResponse> {
   const promptImpl = new FormulaPromptImpl(prompt.input, prompt.data);
     console.log(promptImpl.toPrompt());
-//   const response = await generateText({
-//     model: openrouter("gpt-4o-mini"),
-//     system: SYSTEM_PROMPT,
-//     prompt: promptImpl.toPrompt(),
-//     temperature: 0.1,
-//     maxTokens: 200,
-//   });
+  const response = await generateText({
+    model: openrouter("gpt-4o-mini"),
+    system: SYSTEM_PROMPT,
+    prompt: promptImpl.toPrompt(),
+    temperature: 0.1,
+    maxTokens: 200,
+    experimental_telemetry: { isEnabled: true },
+  });
 
-//   // Clean up the response
-//   const formula = response.text.trim()
-//     .replace(/^`+|`+$/g, '')     // Remove backticks if present
-//     .replace(/^=?\s*/, '=');     // Ensure formula starts with =
-  const formula = "=MOCK(A1)";
+  // Clean up the response
+  const formula = response.text.trim()
+    .replace(/^`+|`+$/g, '')     // Remove backticks if present
+    .replace(/^=?\s*/, '=');     // Ensure formula starts with =
   return { formula };
 }
