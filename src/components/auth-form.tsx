@@ -2,6 +2,7 @@ import { signIn } from "@/actions/auth";
 import { FormButton } from "@/components/form-button";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
+import { z } from "zod";
 
 const providers = [
   { name: "google", label: "Google", Icon: Icons.google },
@@ -17,6 +18,16 @@ type AuthFormProps = {
   };
   error?: string;
 };
+
+export const signInSchema = z.object({
+  email: z
+    .string({ required_error: "Email is required." })
+    .email({ message: "Must be a valid email." }),
+  password: z
+    .string({ required_error: "Password is required." })
+    .min(8, { message: "Password must be at least 8 characters" })
+    .max(32, { message: "Password must be at most 32 characters" }),
+});
 
 export default async function AuthForm({
   title,
@@ -56,6 +67,22 @@ export default async function AuthForm({
           </FormButton>
         </form>
       ))}
+      <form
+        action={async (formData) => {
+          "use server";
+          await signIn("credentials", formData);
+        }}
+      >
+        <label>
+          Email
+          <input name="email" type="email" />
+        </label>
+        <label>
+          Password
+          <input name="password" type="password" />
+        </label>
+        <FormButton>Sign in</FormButton>
+      </form>
     </>
   );
 }

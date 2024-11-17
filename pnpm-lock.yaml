@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@auth/drizzle-adapter':
     specifier: ^1.7.3
-    version: 1.7.3
+    version: 1.7.3(nodemailer@6.9.16)
   '@hookform/resolvers':
     specifier: ^3.9.1
     version: 3.9.1(react-hook-form@7.53.2)
@@ -74,6 +74,9 @@ dependencies:
   ai:
     specifier: ^3.4.33
     version: 3.4.33(react@19.0.0-rc-66855b96-20241106)(svelte@5.2.0)(vue@3.5.12)(zod@3.23.8)
+  bcryptjs:
+    specifier: ^2.4.3
+    version: 2.4.3
   class-variance-authority:
     specifier: ^0.7.0
     version: 0.7.0
@@ -91,13 +94,16 @@ dependencies:
     version: 15.0.3(@opentelemetry/api@1.9.0)(react-dom@19.0.0-rc-66855b96-20241106)(react@19.0.0-rc-66855b96-20241106)
   next-auth:
     specifier: 5.0.0-beta.25
-    version: 5.0.0-beta.25(next@15.0.3)(react@19.0.0-rc-66855b96-20241106)
+    version: 5.0.0-beta.25(next@15.0.3)(nodemailer@6.9.16)(react@19.0.0-rc-66855b96-20241106)
   next-mdx-remote:
     specifier: ^5.0.0
     version: 5.0.0(@types/react@18.3.12)(acorn@8.14.0)(react@19.0.0-rc-66855b96-20241106)
   next-themes:
     specifier: ^0.4.3
     version: 0.4.3(react-dom@19.0.0-rc-66855b96-20241106)(react@19.0.0-rc-66855b96-20241106)
+  nodemailer:
+    specifier: ^6.9.16
+    version: 6.9.16
   postgres:
     specifier: ^3.4.5
     version: 3.4.5
@@ -139,6 +145,9 @@ devDependencies:
   '@trivago/prettier-plugin-sort-imports':
     specifier: ^4.3.0
     version: 4.3.0(prettier@3.3.3)
+  '@types/bcryptjs':
+    specifier: ^2.4.6
+    version: 2.4.6
   '@types/node':
     specifier: ^20.17.6
     version: 20.17.6
@@ -299,7 +308,7 @@ packages:
       '@jridgewell/trace-mapping': 0.3.25
     dev: false
 
-  /@auth/core@0.37.2:
+  /@auth/core@0.37.2(nodemailer@6.9.16):
     resolution: {integrity: sha512-kUvzyvkcd6h1vpeMAojK2y7+PAV5H+0Cc9+ZlKYDFhDY31AlvsB+GW5vNO4qE3Y07KeQgvNO9U0QUx/fN62kBw==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
@@ -317,12 +326,13 @@ packages:
       '@types/cookie': 0.6.0
       cookie: 0.7.1
       jose: 5.9.6
+      nodemailer: 6.9.16
       oauth4webapi: 3.1.2
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
     dev: false
 
-  /@auth/core@0.37.3:
+  /@auth/core@0.37.3(nodemailer@6.9.16):
     resolution: {integrity: sha512-qcffDLwxB9iUYH8GHq68w/KU8jtjAbjjk9xnpoKhjX3+QcntaQ2MKVSkTTocmA6ElpL5vK2xR9CXfQ98dvGnyg==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
@@ -339,15 +349,16 @@ packages:
       '@panva/hkdf': 1.2.1
       cookie: 1.0.1
       jose: 5.9.6
+      nodemailer: 6.9.16
       oauth4webapi: 3.1.2
       preact: 10.24.3
       preact-render-to-string: 6.5.11(preact@10.24.3)
     dev: false
 
-  /@auth/drizzle-adapter@1.7.3:
+  /@auth/drizzle-adapter@1.7.3(nodemailer@6.9.16):
     resolution: {integrity: sha512-0BuGgRjcghoFJQH8796BaLCFXqh77lhizXuDliVK7cF2hs1nXo7eKZ/m5ddFa7ATTOwQ3gncQLHFJ1ap8dOoew==}
     dependencies:
-      '@auth/core': 0.37.3
+      '@auth/core': 0.37.3(nodemailer@6.9.16)
     transitivePeerDependencies:
       - '@simplewebauthn/browser'
       - '@simplewebauthn/server'
@@ -2218,6 +2229,10 @@ packages:
       '@types/estree': 1.0.6
     dev: false
 
+  /@types/bcryptjs@2.4.6:
+    resolution: {integrity: sha512-9xlo6R2qDs5uixm0bcIqCeMCE6HiQsIyel9KQySStiyqNl2tnj2mP3DX1Nf56MD6KMenNNlBBsy3LJ7gUEQPXQ==}
+    dev: true
+
   /@types/cookie@0.6.0:
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
     dev: false
@@ -2778,6 +2793,10 @@ packages:
 
   /balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
+
+  /bcryptjs@2.4.3:
+    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
+    dev: false
 
   /binary-extensions@2.3.0:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
@@ -5042,7 +5061,7 @@ packages:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
 
-  /next-auth@5.0.0-beta.25(next@15.0.3)(react@19.0.0-rc-66855b96-20241106):
+  /next-auth@5.0.0-beta.25(next@15.0.3)(nodemailer@6.9.16)(react@19.0.0-rc-66855b96-20241106):
     resolution: {integrity: sha512-2dJJw1sHQl2qxCrRk+KTQbeH+izFbGFPuJj5eGgBZFYyiYYtvlrBeUw1E/OJJxTRjuxbSYGnCTkUIRsIIW0bog==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
@@ -5058,8 +5077,9 @@ packages:
       nodemailer:
         optional: true
     dependencies:
-      '@auth/core': 0.37.2
+      '@auth/core': 0.37.2(nodemailer@6.9.16)
       next: 15.0.3(@opentelemetry/api@1.9.0)(react-dom@19.0.0-rc-66855b96-20241106)(react@19.0.0-rc-66855b96-20241106)
+      nodemailer: 6.9.16
       react: 19.0.0-rc-66855b96-20241106
     dev: false
 
@@ -5136,6 +5156,11 @@ packages:
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
+    dev: false
+
+  /nodemailer@6.9.16:
+    resolution: {integrity: sha512-psAuZdTIRN08HKVd/E8ObdV6NO7NTBY3KsC30F7M4H1OnmLCUNaS56FpYxyb26zWLSyYF9Ozch9KYHhHegsiOQ==}
+    engines: {node: '>=6.0.0'}
     dev: false
 
   /normalize-path@3.0.0:
