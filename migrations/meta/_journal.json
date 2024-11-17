@@ -15,6 +15,13 @@
       "when": 1731828934416,
       "tag": "0001_spicy_trish_tilby",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1731832518717,
+      "tag": "0002_mixed_vanisher",
+      "breakpoints": true
     }
   ]
 }

@@ -1,7 +1,6 @@
 import { AuthHeader } from "@/app/(auth)/header";
 import { OauthSection } from "@/app/(auth)/oauth-section";
 import { OrDivider } from "@/app/(auth)/or-divider";
-import { SignUpForm } from "@/app/(auth)/sign-up/form";
 import { siteConfig } from "@/config/site";
 import Link from "next/link";
 
@@ -18,7 +17,6 @@ export default async function SignUp() {
       />
       <OauthSection />
       <OrDivider />
-      <SignUpForm />
       <div className="mt-4 text-xs leading-4 text-secondary-foreground">
         By registering, you agree to the processing of your personal data by{" "}
         {siteConfig.name} as described in the &nbsp;
