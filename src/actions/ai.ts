@@ -76,7 +76,7 @@ export async function generateExcelFormula(
 ): Promise<FormulaResponse> {
   const { error } = await checkUsage();
   if (error) {
-    throw new Error(error);
+    return { formula: "", error };
   }
 
   const promptImpl = new FormulaPromptImpl(prompt.input, prompt.data);
