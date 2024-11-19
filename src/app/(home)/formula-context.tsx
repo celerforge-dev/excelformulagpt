@@ -80,7 +80,7 @@ export function FormulaProvider({
         data,
       });
 
-      if (error) {
+      if (error || !formula) {
         throw new Error(error);
       }
 

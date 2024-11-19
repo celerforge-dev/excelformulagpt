@@ -36,6 +36,10 @@ const footerNav = [
         title: "Issues",
         href: "https://github.com/celerforge/excelformulagpt/issues",
       },
+      {
+        title: "support@excelformulagpt.com",
+        href: "#",
+      },
     ],
   },
 ];
