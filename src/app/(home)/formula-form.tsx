@@ -97,7 +97,9 @@ export function FormulaForm({ className }: { className?: string }) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="w-full overflow-hidden rounded-lg border bg-white shadow-md">
-            <UsageDisplay />
+            <div className="flex min-h-9 w-full items-center border-b px-3 text-sm text-secondary-foreground">
+              <UsageDisplay />
+            </div>
             <FormField
               control={form.control}
               name="input"

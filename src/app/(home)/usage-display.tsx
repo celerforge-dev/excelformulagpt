@@ -8,8 +8,28 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useFormula } from "./formula-context";
 
+type StatusDisplayProps = {
+  indicator: "success" | "error" | "loading";
+  children: React.ReactNode;
+};
+
+function StatusDisplay({ indicator, children }: StatusDisplayProps) {
+  const colors = {
+    loading: "bg-gray-300 animate-pulse",
+    success: "bg-emerald-500",
+    error: "bg-red-500",
+  };
+
+  return (
+    <div className="flex items-center gap-1.5">
+      <div className={`h-2 w-2 rounded-full ${colors[indicator]}`} />
+      <span className="text-secondary-foreground">{children}</span>
+    </div>
+  );
+}
+
 export function UsageDisplay() {
-  const { dailyStats } = useFormula();
+  const { usage } = useFormula();
   const { data: session } = useSession();
   const [planType, setPlanType] = useState<PlanType>(PLANS.FREE);
   const [timeLeft, setTimeLeft] = useState<string>("0h 0m");
@@ -33,46 +53,40 @@ export function UsageDisplay() {
     return () => clearInterval(timer);
   }, []);
 
+  if (!usage) {
+    return <StatusDisplay indicator="loading">Loading usage...</StatusDisplay>;
+  }
+
   const isPro = planType === PLANS.PRO;
-  const showCredits = dailyStats.remaining <= 10 && dailyStats.remaining > 0;
+  const showCredits = usage.remaining <= 10 && usage.remaining > 0;
 
   return (
-    <div className="flex min-h-9 w-full items-center border-b px-3 text-sm">
+    <>
       {isPro && !showCredits && (
-        <div className="flex items-center gap-1">
+        <div className="mr-2 flex items-center gap-1">
           <div className="h-2 w-2 rounded-full bg-emerald-500" />
           <span className="text-xs font-medium text-violet-600">
             Pro Member
           </span>
         </div>
       )}
-
-      {showCredits ? (
-        <div className="flex items-center gap-1.5">
-          <div className="h-2 w-2 rounded-full bg-emerald-500" />
-          <span className="text-secondary-foreground">
-            {dailyStats.remaining} {isPro ? "pro" : "free"} credits left
-          </span>
-        </div>
-      ) : (
-        <div className="flex items-center gap-1.5">
-          <div className="h-2 w-2 rounded-full bg-red-500" />
-          <div className="text-secondary-foreground">
-            Refreshes in {timeLeft},{" "}
-            {!isPro && (
-              <span>
-                <Link
-                  href="/pricing"
-                  className="text-black hover:text-gray-600"
-                >
-                  Upgrade to Pro
-                </Link>{" "}
-                for $1.58 to get more credits.
-              </span>
-            )}
-          </div>
-        </div>
+      {showCredits && (
+        <StatusDisplay indicator="success">
+          {usage.remaining} {isPro ? "pro" : "free"} credits left
+        </StatusDisplay>
       )}
-    </div>
+      {!isPro && !showCredits && (
+        <StatusDisplay indicator="error">Refreshes in {timeLeft}</StatusDisplay>
+      )}
+      {!isPro && (
+        <span>
+          ,{" "}
+          <Link href="/pricing" className="text-black hover:text-gray-600">
+            Upgrade to Pro
+          </Link>{" "}
+          for $1.58 to get more credits.
+        </span>
+      )}
+    </>
   );
 }

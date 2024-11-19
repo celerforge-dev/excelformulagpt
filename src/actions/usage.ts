@@ -99,7 +99,7 @@ export async function recordUsage(): Promise<void> {
   }
 }
 
-export type DailyStats = {
+export type Usage = {
   used: number;
   remaining: number;
   limit: number;
@@ -108,7 +108,7 @@ export type DailyStats = {
 /**
  * Get user's daily usage statistics
  */
-export async function getDailyStats(): Promise<DailyStats> {
+export async function getUsage(): Promise<Usage> {
   try {
     const session = await auth();
     if (!session?.user?.id) {

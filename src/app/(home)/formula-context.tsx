@@ -1,7 +1,7 @@
 "use client";
 
 import { generateExcelFormula } from "@/actions/ai";
-import { DailyStats, getDailyStats } from "@/actions/usage";
+import { Usage, getUsage } from "@/actions/usage";
 import { ExcelData } from "@/app/(home)/excel-parser";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -23,7 +23,7 @@ interface FormulaContextType extends FormulaPrompt {
   isLoading: boolean;
   setData: (data: ExcelData | null) => void;
   generate: () => Promise<string>;
-  dailyStats: DailyStats;
+  usage: Usage | null;
 }
 
 const FormulaContext = createContext<FormulaContextType | undefined>(undefined);
@@ -39,11 +39,7 @@ export function FormulaProvider({
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<ExcelData | null>(null);
-  const [dailyStats, setDailyStats] = useState<DailyStats>({
-    used: 0,
-    remaining: 0,
-    limit: 0,
-  });
+  const [usage, setUsage] = useState<Usage | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("formula-records");
@@ -57,15 +53,7 @@ export function FormulaProvider({
   }, []);
 
   useEffect(() => {
-    async function fetchStats() {
-      try {
-        const userStats = await getDailyStats();
-        setDailyStats(userStats);
-      } catch (error) {
-        console.error("Failed to fetch stats:", error);
-      }
-    }
-    fetchStats();
+    getUsage().then(setUsage);
   }, []);
 
   function addRecord(
@@ -99,8 +87,8 @@ export function FormulaProvider({
       addRecord(input, formula, data);
       setInput("");
 
-      const newStats = await getDailyStats();
-      setDailyStats(newStats);
+      const newUsage = await getUsage();
+      setUsage(newUsage);
 
       return formula;
     } finally {
@@ -113,6 +101,25 @@ export function FormulaProvider({
     localStorage.setItem("formula-input", newInput);
   };
 
+  if (!usage) {
+    return (
+      <FormulaContext.Provider
+        value={{
+          records,
+          input,
+          setInput: setInputWithStorage,
+          isLoading,
+          data,
+          setData,
+          generate,
+          usage: usage,
+        }}
+      >
+        {children}
+      </FormulaContext.Provider>
+    );
+  }
+
   return (
     <FormulaContext.Provider
       value={{
@@ -123,7 +130,7 @@ export function FormulaProvider({
         data,
         setData,
         generate,
-        dailyStats,
+        usage,
       }}
     >
       {children}
