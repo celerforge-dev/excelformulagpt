@@ -1,14 +1,12 @@
-"use client";
-
 import { FormulaSection } from "@/app/(home)/formula-section";
-import { HomeHeader } from "@/app/(home)/header";
 import { Footer } from "@/components/footer";
+import { Header } from "@/components/header";
 
 export default function Home() {
   return (
     <>
       <div className="min-h-screen">
-        <HomeHeader />
+        <Header />
         <main className="container">
           <div className="my-24">
             <div className="mx-auto max-w-2xl text-center">

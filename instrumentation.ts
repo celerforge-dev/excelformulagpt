@@ -1,7 +1,9 @@
 import { registerOTel } from "@vercel/otel";
- 
+import { LangfuseExporter } from "langfuse-vercel";
+
 export function register() {
   registerOTel({
-    serviceName: "multi-step-tool-calls-demo",
+    serviceName: "lExcelFormulaGPT",
+    traceExporter: new LangfuseExporter(),
   });
 }

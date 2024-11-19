@@ -6,10 +6,7 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { drizzle } from "drizzle-orm/postgres-js";
 import type { AdapterAccountType } from "next-auth/adapters";
-import postgres from "postgres";
-import { env } from "~/env";
 
 export const users = pgTable("user", {
   id: text("id")
@@ -88,14 +85,25 @@ export const authenticators = pgTable(
   }),
 );
 
-export const schema = {
-  users,
-  accounts,
-  sessions,
-  verificationTokens,
-  authenticators,
-};
+export const subscriptions = pgTable("subscription", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  planType: text("plan_type").notNull(),
+  startAt: timestamp("start_at", { mode: "date" }).notNull(),
+  expireAt: timestamp("expire_at", { mode: "date" }),
+  status: text("status").notNull(),
+  createdAt: timestamp("created_at", { mode: "date" })
+    .notNull()
+    .$defaultFn(() => new Date()),
+});
 
-const pool = postgres(env.DATABASE_URL, { max: 1 });
+export const PLANS = {
+  FREE: "free",
+  PRO: "pro",
+} as const;
 
-export const db = drizzle(pool, { schema });
+export type PlanType = (typeof PLANS)[keyof typeof PLANS];

@@ -1,6 +1,7 @@
 "use client";
 
 import { generateExcelFormula } from "@/actions/ai";
+import { DailyStats, getDailyStats } from "@/actions/usage";
 import { ExcelData } from "@/app/(home)/excel-parser";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -22,6 +23,7 @@ interface FormulaContextType extends FormulaPrompt {
   isLoading: boolean;
   setData: (data: ExcelData | null) => void;
   generate: () => Promise<string>;
+  dailyStats: DailyStats;
 }
 
 const FormulaContext = createContext<FormulaContextType | undefined>(undefined);
@@ -37,12 +39,33 @@ export function FormulaProvider({
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<ExcelData | null>(null);
+  const [dailyStats, setDailyStats] = useState<DailyStats>({
+    used: 0,
+    remaining: 0,
+    limit: 0,
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem("formula-records");
+    const savedInput = localStorage.getItem("formula-input");
     if (saved) {
       setRecords(JSON.parse(saved));
     }
+    if (savedInput) {
+      setInput(savedInput);
+    }
+  }, []);
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const userStats = await getDailyStats();
+        setDailyStats(userStats);
+      } catch (error) {
+        console.error("Failed to fetch stats:", error);
+      }
+    }
+    fetchStats();
   }, []);
 
   function addRecord(
@@ -75,22 +98,32 @@ export function FormulaProvider({
 
       addRecord(input, formula, data);
       setInput("");
+
+      const newStats = await getDailyStats();
+      setDailyStats(newStats);
+
       return formula;
     } finally {
       setIsLoading(false);
     }
   }
 
+  const setInputWithStorage = (newInput: string) => {
+    setInput(newInput);
+    localStorage.setItem("formula-input", newInput);
+  };
+
   return (
     <FormulaContext.Provider
       value={{
         records,
         input,
-        setInput,
+        setInput: setInputWithStorage,
         isLoading,
         data,
         setData,
         generate,
+        dailyStats,
       }}
     >
       {children}
