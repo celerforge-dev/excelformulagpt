@@ -1,6 +1,7 @@
 "use client";
 
 import { generateExcelFormula } from "@/actions/ai";
+import { Usage, getUsage } from "@/actions/usage";
 import { ExcelData } from "@/app/(home)/excel-parser";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -22,6 +23,7 @@ interface FormulaContextType extends FormulaPrompt {
   isLoading: boolean;
   setData: (data: ExcelData | null) => void;
   generate: () => Promise<string>;
+  usage: Usage | null;
 }
 
 const FormulaContext = createContext<FormulaContextType | undefined>(undefined);
@@ -37,12 +39,21 @@ export function FormulaProvider({
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<ExcelData | null>(null);
+  const [usage, setUsage] = useState<Usage | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("formula-records");
+    const savedInput = localStorage.getItem("formula-input");
     if (saved) {
       setRecords(JSON.parse(saved));
     }
+    if (savedInput) {
+      setInput(savedInput);
+    }
+  }, []);
+
+  useEffect(() => {
+    getUsage().then(setUsage);
   }, []);
 
   function addRecord(
@@ -75,10 +86,38 @@ export function FormulaProvider({
 
       addRecord(input, formula, data);
       setInput("");
+
+      const newUsage = await getUsage();
+      setUsage(newUsage);
+
       return formula;
     } finally {
       setIsLoading(false);
     }
+  }
+
+  const setInputWithStorage = (newInput: string) => {
+    setInput(newInput);
+    localStorage.setItem("formula-input", newInput);
+  };
+
+  if (!usage) {
+    return (
+      <FormulaContext.Provider
+        value={{
+          records,
+          input,
+          setInput: setInputWithStorage,
+          isLoading,
+          data,
+          setData,
+          generate,
+          usage: usage,
+        }}
+      >
+        {children}
+      </FormulaContext.Provider>
+    );
   }
 
   return (
@@ -86,11 +125,12 @@ export function FormulaProvider({
       value={{
         records,
         input,
-        setInput,
+        setInput: setInputWithStorage,
         isLoading,
         data,
         setData,
         generate,
+        usage,
       }}
     >
       {children}

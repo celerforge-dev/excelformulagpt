@@ -8,11 +8,14 @@ import {
 type SignOutParams = Parameters<typeof nextAuthSignOut>[0];
 
 export async function signOut(options: SignOutParams) {
+  "use server";
   return nextAuthSignOut(options);
 }
 
-type SignInParams = Parameters<typeof nextAuthSignIn>;
-
-export async function signIn(...args: SignInParams) {
-  return nextAuthSignIn(...args);
+export async function signIn(
+  provider: string,
+  options: { redirectTo: string },
+) {
+  "use server";
+  return nextAuthSignIn(provider, options);
 }
