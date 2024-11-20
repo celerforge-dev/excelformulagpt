@@ -44,16 +44,22 @@ export function FormulaProvider({
   useEffect(() => {
     const saved = localStorage.getItem("formula-records");
     const savedInput = localStorage.getItem("formula-input");
+    const savedUsage = localStorage.getItem("formula-usage");
+
     if (saved) {
       setRecords(JSON.parse(saved));
     }
     if (savedInput) {
       setInput(savedInput);
     }
-  }, []);
-
-  useEffect(() => {
-    getUsage().then(setUsage);
+    if (savedUsage) {
+      setUsage(JSON.parse(savedUsage));
+    } else {
+      getUsage().then((newUsage) => {
+        setUsage(newUsage);
+        localStorage.setItem("formula-usage", JSON.stringify(newUsage));
+      });
+    }
   }, []);
 
   function addRecord(
@@ -89,6 +95,7 @@ export function FormulaProvider({
 
       const newUsage = await getUsage();
       setUsage(newUsage);
+      localStorage.setItem("formula-usage", JSON.stringify(newUsage));
 
       return formula;
     } finally {

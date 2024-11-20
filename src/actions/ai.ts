@@ -22,10 +22,13 @@ User: Average of B where A > 100
 Response: =AVERAGEIF(A:A,">100",B:B)
 `;
 
-interface FormulaResponse {
+const MAX_INPUT_TOKENS = 1500;
+const MAX_OUTPUT_TOKENS = 500;
+
+type FormulaResponse = {
   formula: string;
   error?: string;
-}
+};
 
 class FormulaPromptImpl implements FormulaPrompt {
   constructor(
@@ -80,12 +83,25 @@ export async function generateExcelFormula(
   }
 
   const promptImpl = new FormulaPromptImpl(prompt.input, prompt.data);
+  const fullPrompt = promptImpl.toPrompt();
+
+  const estimatedSystemTokens = Math.ceil(SYSTEM_PROMPT.length / 4);
+  const estimatedPromptTokens = Math.ceil(fullPrompt.length / 4);
+  const estimatedTotalTokens = estimatedSystemTokens + estimatedPromptTokens;
+
+  if (estimatedTotalTokens > MAX_INPUT_TOKENS) {
+    return {
+      formula: "",
+      error: `Input too long (${estimatedTotalTokens} tokens). Please reduce the number of columns or simplify the request.`,
+    };
+  }
+
   const response = await generateText({
     model: openrouter("gpt-4o-mini"),
     system: SYSTEM_PROMPT,
-    prompt: promptImpl.toPrompt(),
+    prompt: fullPrompt,
     temperature: 0.1,
-    maxTokens: 2000,
+    maxTokens: MAX_OUTPUT_TOKENS,
     experimental_telemetry: {
       isEnabled: true,
     },
