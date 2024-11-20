@@ -1,28 +1,11 @@
 "use client";
 
-import { Icons } from "@/components/icons";
+import { ComparisonTable } from "@/app/(main)/pricing/comparison-table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { PriceCard } from "./price-card";
 
 const PRICING_TIERS = {
   FREE: "free",
@@ -32,19 +15,7 @@ const PRICING_TIERS = {
 
 type PlanTier = (typeof PRICING_TIERS)[keyof typeof PRICING_TIERS];
 
-interface Feature {
-  name: string;
-  free: boolean | string;
-  pro: boolean | string;
-  max: boolean | string;
-}
-
-interface PlanFeature {
-  type: string;
-  features: Feature[];
-}
-
-export const planFeatures: PlanFeature[] = [
+const planFeatures = [
   {
     type: "Core Features",
     features: [
@@ -81,18 +52,7 @@ export const planFeatures: PlanFeature[] = [
   },
 ];
 
-interface PricingPlan {
-  name: string;
-  price: {
-    monthly: number;
-    yearly: number;
-  };
-  description: string;
-  ctaText: string;
-  popular?: boolean;
-}
-
-export const pricingPlans: PricingPlan[] = [
+const pricingPlans = [
   {
     name: "Free",
     price: {
@@ -106,7 +66,7 @@ export const pricingPlans: PricingPlan[] = [
     name: "Pro",
     price: {
       monthly: 1.98,
-      yearly: 19.8,
+      yearly: 18.98,
     },
     description: "Great for regular users who need more power",
     ctaText: "Upgrade to Pro",
@@ -116,7 +76,7 @@ export const pricingPlans: PricingPlan[] = [
     name: "Max",
     price: {
       monthly: 7.98,
-      yearly: 79.8,
+      yearly: 76.98,
     },
     description: "Best for businesses and power users",
     ctaText: "Upgrade to Max",
@@ -161,132 +121,6 @@ export function getPlanFeatures(planName: string): string[] {
   return Array.from(features);
 }
 
-function calculateDisplayPrice(
-  price: { monthly: number; yearly: number },
-  isYearly: boolean,
-): string {
-  if (price.monthly === 0) return "Free";
-  const amount = isYearly ? (price.yearly / 12).toFixed(2) : price.monthly;
-  return `$${amount}`;
-}
-
-function PriceCard({
-  plan,
-  isYearly,
-}: {
-  plan: PricingPlan;
-  isYearly: boolean;
-}) {
-  const displayPrice = calculateDisplayPrice(plan.price, isYearly);
-
-  return (
-    <Card
-      className={cn(
-        "rounded-lg shadow-none",
-        plan.popular ? "border-primary" : "",
-      )}
-    >
-      <div className="flex min-h-[430px] flex-col">
-        <CardHeader className="flex-shrink-0">
-          <CardTitle className="mb-2 text-xl">
-            <div className="relative flex items-center gap-2">
-              {plan.name}
-              {plan.popular && (
-                <Badge className="uppercase">Most popular</Badge>
-              )}
-            </div>
-          </CardTitle>
-          <div className="mb-2 min-h-24">
-            <span className="text-6xl font-bold">{displayPrice}</span>
-            <span className="ml-1 text-sm text-muted-foreground">/month</span>
-            {isYearly && (
-              <div className="mt-3 text-sm text-muted-foreground">
-                {plan.name === "Free"
-                  ? "Free forever, no credit card required"
-                  : `Billed $${plan.price.yearly}/year`}
-              </div>
-            )}
-          </div>
-          <CardDescription className="min-h-12 text-base">
-            {plan.description}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex-grow pb-0">
-          <ul className="space-y-4">
-            {getPlanFeatures(plan.name).map((feature) => (
-              <li key={feature} className="flex items-center">
-                <Icons.circleCheck className="mr-3 h-5 w-5 flex-shrink-0" />
-                <span className="text-base text-muted-foreground">
-                  {feature}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-        <CardFooter className="flex-shrink-0 pt-6">
-          <Button
-            className="w-full text-base"
-            variant={plan.name === "Free" ? "outline" : "default"}
-          >
-            {plan.ctaText}
-          </Button>
-        </CardFooter>
-      </div>
-    </Card>
-  );
-}
-
-function ComparisonTable() {
-  return (
-    <Table className="hidden lg:table">
-      <TableHeader>
-        <TableRow className="bg-muted hover:bg-muted">
-          <TableHead className="w-3/12 text-primary">Plans</TableHead>
-          <TableHead className="w-2/12 text-center text-lg font-medium text-primary">
-            Free
-          </TableHead>
-          <TableHead className="w-2/12 text-center text-lg font-medium text-primary">
-            Pro
-          </TableHead>
-          <TableHead className="w-2/12 text-center text-lg font-medium text-primary">
-            Max
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {planFeatures.flatMap((featureType) => [
-          <TableRow key={`${featureType.type}-header`} className="bg-muted/50">
-            <TableCell colSpan={4} className="font-bold">
-              {featureType.type}
-            </TableCell>
-          </TableRow>,
-          ...featureType.features.map((feature) => (
-            <TableRow
-              key={`${featureType.type}-${feature.name}`}
-              className="text-muted-foreground"
-            >
-              <TableCell>{feature.name}</TableCell>
-              {Object.values(PRICING_TIERS).map((tier: PlanTier) => (
-                <TableCell key={tier}>
-                  <div className="mx-auto w-min">
-                    {typeof feature[tier] === "string" ? (
-                      <span>{feature[tier]}</span>
-                    ) : feature[tier] ? (
-                      <Icons.check className="h-5 w-5" />
-                    ) : (
-                      <Icons.minus className="h-5 w-5" />
-                    )}
-                  </div>
-                </TableCell>
-              ))}
-            </TableRow>
-          )),
-        ])}
-      </TableBody>
-    </Table>
-  );
-}
-
 export default function PricingSectionCards() {
   const [isYearly, setIsYearly] = useState(true);
 
@@ -313,8 +147,8 @@ export default function PricingSectionCards() {
           />
           <Label htmlFor="billing-toggle" className="relative text-lg">
             Yearly
-            <Badge className="absolute -right-24 -top-8 w-40 bg-black text-white">
-              GET 2 MONTHS FREE
+            <Badge className="absolute -right-24 -top-8 bg-black text-white">
+              SAVE UP TO 20%
             </Badge>
           </Label>
         </div>
@@ -325,7 +159,10 @@ export default function PricingSectionCards() {
         <div className="grid h-full gap-8 md:grid-cols-2 lg:grid-cols-3">
           {pricingPlans.map((plan) => (
             <div key={plan.name} className="h-full">
-              <PriceCard plan={plan} isYearly={isYearly} />
+              <PriceCard
+                plan={{ ...plan, features: getPlanFeatures(plan.name) }}
+                isYearly={isYearly}
+              />
             </div>
           ))}
         </div>
@@ -336,8 +173,10 @@ export default function PricingSectionCards() {
         <div className="mb-16 text-center">
           <h3 className="text-3xl font-bold">Compare plans</h3>
         </div>
-
-        <ComparisonTable />
+        <ComparisonTable
+          planFeatures={planFeatures}
+          pricingTiers={PRICING_TIERS}
+        />
       </div>
     </div>
   );
