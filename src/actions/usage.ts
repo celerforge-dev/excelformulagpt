@@ -48,7 +48,11 @@ export async function checkUsage(): Promise<UsageResult> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      throw new Error("Unauthorized");
+      return {
+        canUse: false,
+        remainingCount: 0,
+        error: "Unauthorized",
+      };
     }
 
     const { type: planType } = await getUserPlan();
@@ -69,7 +73,11 @@ export async function checkUsage(): Promise<UsageResult> {
     };
   } catch (error) {
     console.error("Failed to check usage:", error);
-    throw new Error("System busy, please try again later");
+    return {
+      canUse: false,
+      remainingCount: 0,
+      error: "System busy, please try again later",
+    };
   }
 }
 
@@ -81,7 +89,7 @@ export async function recordUsage(): Promise<void> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      throw new Error("Unauthorized");
+      return;
     }
 
     const pipeline = redis.pipeline();
@@ -95,7 +103,6 @@ export async function recordUsage(): Promise<void> {
     await pipeline.exec();
   } catch (error) {
     console.error("Failed to record usage:", error);
-    throw new Error("System busy, please try again later");
   }
 }
 
@@ -112,7 +119,7 @@ export async function getUsage(): Promise<Usage> {
   try {
     const session = await auth();
     if (!session?.user?.id) {
-      throw new Error("Unauthorized");
+      return { used: 0, remaining: 5, limit: 0 };
     }
 
     const { type: planType } = await getUserPlan();
@@ -127,7 +134,7 @@ export async function getUsage(): Promise<Usage> {
     };
   } catch (error) {
     console.error("Failed to get usage stats:", error);
-    throw new Error("System busy, please try again later");
+    return { used: 0, remaining: 5, limit: 0 };
   }
 }
 
@@ -140,6 +147,6 @@ export async function getSystemTotal(): Promise<number> {
     return parseInt((await redis.get(REDIS_KEYS.systemTotal)) || "0", 10);
   } catch (error) {
     console.error("Failed to get system total:", error);
-    throw new Error("System busy, please try again later");
+    return 0;
   }
 }
