@@ -24,7 +24,7 @@ const LINKS = [
   {
     title: "Feedback",
     isExternal: true,
-    href: "/https://github.com/celerforge/excelformulagpt/issues",
+    href: "https://github.com/celerforge/excelformulagpt/issues",
     regex: "^/feedback",
   },
 ];
