@@ -1,6 +1,7 @@
 "use client";
 
 import { OauthSection } from "@/app/(auth)/oauth-section";
+import { getPlanFeatures } from "@/app/(main)/pricing/plan";
 import {
   Dialog,
   DialogContent,
@@ -25,11 +26,7 @@ export function AuthDialog({ trigger }: { trigger: React.ReactNode }) {
           </DialogDescription>
         </DialogHeader>
         <div className="mt-4 space-y-4">
-          {[
-            "Generate up to 5 Excel formulas per day",
-            "Save your last 5 generated formulas",
-            "Get more accurate formula suggestions",
-          ].map((text) => (
+          {getPlanFeatures("Free").map((text) => (
             <div key={text} className="flex items-center gap-3">
               <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100">
                 <span className="text-sm text-emerald-600">✓</span>

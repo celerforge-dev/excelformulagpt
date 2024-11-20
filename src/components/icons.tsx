@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   Check,
+  CircleCheck,
   CirclePlus,
   Copy,
   CornerDownLeft,
@@ -10,6 +11,7 @@ import {
   Loader,
   LucideIcon,
   LucideProps,
+  Minus,
   RefreshCw,
   X,
 } from "lucide-react";
@@ -48,4 +50,6 @@ export const Icons: Record<string, Icon> = {
   circlePlus: CirclePlus,
   fileUp: FileUp,
   x: X,
+  circleCheck: CircleCheck,
+  minus: Minus,
 };

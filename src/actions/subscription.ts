@@ -1,8 +1,8 @@
 "use server";
 
-import {PLANS, PlanType, subscriptions } from "@/lib/drizzle";
-import { db } from "@/lib/drizzle.config";
 import { auth } from "@/lib/auth";
+import { PLANS, PlanType, subscriptions } from "@/lib/drizzle";
+import { db } from "@/lib/drizzle.config";
 
 import { and, eq, gte, lte } from "drizzle-orm";
 
@@ -18,7 +18,11 @@ interface UserPlan {
 export async function getUserPlan(): Promise<UserPlan> {
   const session = await auth();
   if (!session?.user?.id) {
-    throw new Error("Unauthorized");
+    return {
+      type: PLANS.FREE,
+      expireAt: null,
+      status: "active",
+    };
   }
 
   const now = new Date();
@@ -57,7 +61,7 @@ export async function updateUserSubscription(params: {
 }): Promise<void> {
   const session = await auth();
   if (!session?.user?.id) {
-    throw new Error("Unauthorized");
+    return;
   }
 
   const { planType, startAt = new Date(), expireAt } = params;
