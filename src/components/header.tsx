@@ -76,7 +76,7 @@ export function Header({ className }: { className?: string }) {
           <Link href="/" className="flex-shrink-0">
             <Logo />
           </Link>
-          <div className="relative">
+          <div className="relative hidden md:block">
             <div
               className="absolute left-0 top-1.5 h-8 rounded-full bg-neutral-800 opacity-0 transition-[transform,opacity,width]"
               ref={highlightRef}
