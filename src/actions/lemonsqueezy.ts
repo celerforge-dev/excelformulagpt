@@ -44,7 +44,7 @@ export async function getCheckoutURL(variantId: number, embed = false) {
     },
     productOptions: {
       enabledVariants: [variantId],
-      redirectUrl: `${env.NEXT_PUBLIC_APP_URL}/`,
+      redirectUrl: `${env.NEXT_PUBLIC_APP_URL}/?refresh-usage=1`,
       receiptButtonText: "Go to Home",
       receiptThankYouNote: "Thank you for purchasing!",
     },
