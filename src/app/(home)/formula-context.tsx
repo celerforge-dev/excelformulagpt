@@ -1,8 +1,9 @@
 "use client";
 
 import { generateExcelFormula } from "@/actions/ai";
-import { Usage, getUsage } from "@/actions/usage";
+import { Usage, getRemainingSecondsToday, getUsage } from "@/actions/usage";
 import { ExcelData } from "@/app/(home)/excel-parser";
+import { useSearchParams } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface FormulaRecord {
@@ -28,6 +29,31 @@ interface FormulaContextType extends FormulaPrompt {
 
 const FormulaContext = createContext<FormulaContextType | undefined>(undefined);
 
+interface StorageItem<T> {
+  value: T;
+  expiry: number;
+}
+
+function setWithExpiry<T>(key: string, value: T, ttl: number) {
+  const item: StorageItem<T> = {
+    value: value,
+    expiry: Date.now() + ttl,
+  };
+  localStorage.setItem(key, JSON.stringify(item));
+}
+
+function getWithExpiry<T>(key: string): T | null {
+  const itemStr = localStorage.getItem(key);
+  if (!itemStr) return null;
+
+  const item: StorageItem<T> = JSON.parse(itemStr);
+  if (Date.now() > item.expiry) {
+    localStorage.removeItem(key);
+    return null;
+  }
+  return item.value;
+}
+
 export function FormulaProvider({
   children,
   maxRecords = 5,
@@ -35,6 +61,8 @@ export function FormulaProvider({
   children: React.ReactNode;
   maxRecords?: number;
 }) {
+  const searchParams = useSearchParams();
+  const shouldRefreshUsage = !!searchParams.get("refresh-usage");
   const [records, setRecords] = useState<FormulaRecord[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -42,25 +70,29 @@ export function FormulaProvider({
   const [usage, setUsage] = useState<Usage | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem("formula-records");
-    const savedInput = localStorage.getItem("formula-input");
-    const savedUsage = localStorage.getItem("formula-usage");
+    const saved = getWithExpiry<FormulaRecord[]>("formula-records");
+    const savedInput = getWithExpiry<string>("formula-input");
+    const savedUsage = getWithExpiry<Usage>("formula-usage");
 
     if (saved) {
-      setRecords(JSON.parse(saved));
+      setRecords(saved);
     }
     if (savedInput) {
       setInput(savedInput);
     }
-    if (savedUsage) {
-      setUsage(JSON.parse(savedUsage));
+    if (savedUsage && !shouldRefreshUsage) {
+      setUsage(savedUsage);
     } else {
-      getUsage().then((newUsage) => {
+      getUsage().then(async (newUsage) => {
         setUsage(newUsage);
-        localStorage.setItem("formula-usage", JSON.stringify(newUsage));
+        setWithExpiry(
+          "formula-usage",
+          newUsage,
+          await getRemainingSecondsToday(),
+        );
       });
     }
-  }, []);
+  }, [shouldRefreshUsage]);
 
   function addRecord(
     promptInput: string,
@@ -75,7 +107,7 @@ export function FormulaProvider({
     };
     const updatedRecords = [newRecord, ...records].slice(0, maxRecords);
     setRecords(updatedRecords);
-    localStorage.setItem("formula-records", JSON.stringify(updatedRecords));
+    setWithExpiry("formula-records", updatedRecords, 7 * 24 * 60 * 60 * 1000);
   }
 
   async function generate() {
@@ -95,7 +127,7 @@ export function FormulaProvider({
 
       const newUsage = await getUsage();
       setUsage(newUsage);
-      localStorage.setItem("formula-usage", JSON.stringify(newUsage));
+      setWithExpiry("formula-usage", newUsage, 24 * 60 * 60 * 1000);
 
       return formula;
     } finally {
@@ -105,7 +137,7 @@ export function FormulaProvider({
 
   const setInputWithStorage = (newInput: string) => {
     setInput(newInput);
-    localStorage.setItem("formula-input", newInput);
+    setWithExpiry("formula-input", newInput, 24 * 60 * 60 * 1000);
   };
 
   if (!usage) {
