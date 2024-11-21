@@ -210,7 +210,7 @@ export function PricingSectionCards({
       </div>
 
       {/* Comparison Section */}
-      <div className="mt-20 lg:mt-32">
+      <div className="mt-20 hidden lg:mt-32 lg:block">
         <div className="mb-16 text-center">
           <h3 className="text-3xl font-bold">Compare plans</h3>
         </div>

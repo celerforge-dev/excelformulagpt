@@ -77,7 +77,7 @@ export function FormulaProvider({
 
   useEffect(() => {
     const saved = getWithExpiry<FormulaRecord[]>(STORAGE_KEYS.RECORDS);
-    const savedInput = localStorage.getItem(STORAGE_KEYS.INPUT);
+    const savedInput = getWithExpiry<string>(STORAGE_KEYS.INPUT);
     const savedUsage = getWithExpiry<Usage>(STORAGE_KEYS.USAGE);
 
     if (saved) {
