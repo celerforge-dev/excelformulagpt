@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<a href="https://excelformulagpt.com">
+  <img alt="Excel Formula GPT - AI Excel Formula Generator" src="https://github.com/user-attachments/assets/d159e2ab-231c-4d75-a645-e547e978381e">
+</a>
 
-## Getting Started
+<h3 align="center">Excel Formula GPT</h3>
 
-First, run the development server:
+<p align="center">
+    AI-powered Excel formula generator.
+    <br />
+    <a href="https://excelformulagpt.com"><strong>Learn more »</strong></a>
+    <br />
+    <br />
+    <a href="#introduction"><strong>Introduction</strong></a> ·
+    <a href="#features"><strong>Features</strong></a> ·
+    <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
+    <a href="#contributing"><strong>Contributing</strong></a>
+</p>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<br/>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Introduction
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Excel Formula GPT is a open-source AI-powered Excel formula generator that converts natural language descriptions into precise Excel formulas. It helps users save time and avoid common formula errors by providing the exact formulas they need.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Features
 
-## Learn More
+- Natural language to Excel formula conversion
+- Excel file upload
+- History saving
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js](https://nextjs.org/) – framework
+- [TypeScript](https://www.typescriptlang.org/) – language
+- [Tailwind](https://tailwindcss.com/) – CSS
+- [ShadcnUI](https://ui.shadcn.com/) – UI component
+- [Upstash](https://upstash.com/) – redis
+- [NextAuth.js](https://next-auth.js.org/) – auth
+- [Lemonsqueezy](https://www.lemonsqueezy.com/) – payments
+- [Vercel](https://vercel.com/) – deployments
+- [Openrouter](https://openrouter.ai/) - LLM
+- [Langfuse](https://langfuse.com/) – LLM traces
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+GNU Affero General Public License Version 3 (AGPLv3)
