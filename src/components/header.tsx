@@ -13,7 +13,7 @@ import { useRef } from "react";
 const LINKS = [
   {
     title: "Product",
-    href: "/product",
+    href: "/",
     regex: "^/",
   },
   {

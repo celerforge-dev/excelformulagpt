@@ -1,5 +1,5 @@
+import { db } from "@/db/config";
 import authConfig from "@/lib/auth.config";
-import { db } from "@/lib/drizzle.config";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
 

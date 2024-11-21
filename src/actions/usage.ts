@@ -1,14 +1,14 @@
 "use server";
 
 import { getUserPlan } from "@/actions/subscription";
+import { PLAN_TIERS } from "@/db/schema";
 import { auth } from "@/lib/auth";
-import { PLANS } from "@/lib/drizzle";
 import { redis } from "@/lib/redis";
-
 // Usage limits for different user types
 const USAGE_LIMITS = {
   FREE: 5,
   PRO: 100,
+  MAX: 1000,
 } as const;
 
 // Redis key patterns
@@ -55,10 +55,15 @@ export async function checkUsage(): Promise<UsageResult> {
       };
     }
 
-    const { type: planType } = await getUserPlan();
+    const { tier: planTier } = await getUserPlan();
     const dailyKey = REDIS_KEYS.dailyUsage(session?.user?.id);
     const currentUsage = parseInt((await redis.get(dailyKey)) || "0", 10);
-    const limit = planType === PLANS.PRO ? USAGE_LIMITS.PRO : USAGE_LIMITS.FREE;
+    const limit =
+      planTier === PLAN_TIERS.MAX
+        ? USAGE_LIMITS.MAX
+        : planTier === PLAN_TIERS.PRO
+          ? USAGE_LIMITS.PRO
+          : USAGE_LIMITS.FREE;
     const remaining = Math.max(0, limit - currentUsage);
 
     return {
@@ -66,9 +71,11 @@ export async function checkUsage(): Promise<UsageResult> {
       remainingCount: remaining,
       error:
         remaining <= 0
-          ? planType === PLANS.PRO
-            ? "You've reached your daily PRO limit. Please try again tomorrow."
-            : "You've reached your daily free limit. Upgrade to PRO for more."
+          ? planTier === PLAN_TIERS.MAX
+            ? "You've reached your daily MAX plan limit. Please try again tomorrow."
+            : planTier === PLAN_TIERS.PRO
+              ? "You've reached your daily PRO limit. Please try again tomorrow."
+              : "You've reached your daily free limit. Upgrade to PRO or MAX for more."
           : undefined,
     };
   } catch (error) {
@@ -122,10 +129,15 @@ export async function getUsage(): Promise<Usage> {
       return { used: 0, remaining: 5, limit: 0 };
     }
 
-    const { type: planType } = await getUserPlan();
+    const { tier: planTier } = await getUserPlan();
     const dailyKey = REDIS_KEYS.dailyUsage(session.user.id);
     const used = parseInt((await redis.get(dailyKey)) || "0", 10);
-    const limit = planType === PLANS.PRO ? USAGE_LIMITS.PRO : USAGE_LIMITS.FREE;
+    const limit =
+      planTier === PLAN_TIERS.MAX
+        ? USAGE_LIMITS.MAX
+        : planTier === PLAN_TIERS.PRO
+          ? USAGE_LIMITS.PRO
+          : USAGE_LIMITS.FREE;
 
     return {
       used,

@@ -27,7 +27,7 @@ function FormulaResultCard({
 }: FormulaCardProps) {
   return (
     <div className="mt-2">
-      <div className="rounded-lg border bg-white p-3 shadow-md">
+      <div className="rounded-lg border bg-white p-3 hover:shadow">
         <div className="flex justify-between">
           <div>
             <div className="flex items-center gap-2">

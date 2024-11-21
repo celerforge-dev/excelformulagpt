@@ -33,7 +33,7 @@ const footerNav = [
     title: "Feedback",
     links: [
       {
-        title: "Issues",
+        title: "Github Issues",
         href: "https://github.com/celerforge/excelformulagpt/issues",
       },
       {
