@@ -37,6 +37,26 @@ export async function getUserPlan(): Promise<UserPlan> {
       plan: true,
     },
   });
+  const subscription1 = await db.query.subscriptions.findFirst({
+    where: eq(subscriptions.userId, session.user.id),
+  });
+  const subscription2 = await db.query.subscriptions.findFirst({
+    where: and(
+      eq(subscriptions.userId, session.user.id),
+      eq(subscriptions.status, "active"),
+    ),
+  });
+  const subscription3 = await db.query.subscriptions.findFirst({
+    where: and(
+      eq(subscriptions.userId, session.user.id),
+      eq(subscriptions.status, "active"),
+      lte(subscriptions.renewsAt, now),
+    ),
+  });
+  console.log("subscription", subscription);
+  console.log("subscription1", subscription1);
+  console.log("subscription2", subscription2);
+  console.log("subscription3", subscription3);
 
   if (!subscription) {
     return {
