@@ -57,27 +57,30 @@ export function UsageDisplay() {
   }
 
   const isPro = planTier === PLAN_TIERS.PRO;
+  const isMax = planTier === PLAN_TIERS.MAX;
+  const isPremium = isPro || isMax;
   const showCredits = usage.remaining <= 10 && usage.remaining > 0;
 
   return (
     <>
-      {isPro && !showCredits && (
+      {isPremium && !showCredits && (
         <div className="mr-2 flex items-center gap-1">
           <div className="h-2 w-2 rounded-full bg-emerald-500" />
           <span className="text-xs font-medium text-violet-600">
-            Pro Member
+            {isMax ? "Max Member" : "Pro Member"}
           </span>
         </div>
       )}
       {showCredits && (
         <StatusDisplay indicator="success">
-          {usage.remaining} {isPro ? "pro" : "free"} credits left
+          {usage.remaining} {isMax ? "max" : isPro ? "pro" : "free"} credits
+          left
         </StatusDisplay>
       )}
-      {!isPro && !showCredits && (
+      {!isPremium && !showCredits && (
         <StatusDisplay indicator="error">Refreshes in {timeLeft}</StatusDisplay>
       )}
-      {!isPro && (
+      {!isPremium && (
         <span>
           ,{" "}
           <Link href="/pricing" className="text-black hover:text-gray-600">
