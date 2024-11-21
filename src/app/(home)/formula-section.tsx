@@ -24,7 +24,7 @@ export function FormulaSection() {
   return (
     <FormulaProvider>
       <div className="mx-auto my-10 w-full max-w-xl">
-        <div className="rounded-xl border border-gray-100 bg-white/95 p-2 shadow-lg">
+        <div className="rounded-xl border border-black/10 p-2 -outline-offset-2">
           <FormulaForm />
           <FormulaResultList />
         </div>

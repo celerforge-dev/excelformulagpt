@@ -4,6 +4,7 @@ import { ComparisonTable } from "@/app/(main)/pricing/comparison-table";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { plans } from "@/db/schema";
 import { useState } from "react";
 import { PriceCard } from "./price-card";
 
@@ -52,34 +53,41 @@ const planFeatures = [
   },
 ];
 
-const pricingPlans = [
+const PLAN_CONFIG = [
   {
     name: "Free",
-    price: {
-      monthly: 0,
-      yearly: 0,
-    },
     description: "Perfect for trying out and personal use",
     ctaText: "Start for free",
   },
   {
+    key: "ExcelFormulaGPT PRO",
     name: "Pro",
-    price: {
-      monthly: 1.98,
-      yearly: 18.98,
-    },
     description: "Great for regular users who need more power",
     ctaText: "Upgrade to Pro",
     popular: true,
+    billingPeriod: "monthly",
   },
   {
+    key: "ExcelFormulaGPT PRO YEARLY",
+    name: "Pro",
+    description: "Great for regular users who need more power",
+    ctaText: "Upgrade to Pro",
+    popular: true,
+    billingPeriod: "yearly",
+  },
+  {
+    key: "ExcelFormulaGPT MAX",
     name: "Max",
-    price: {
-      monthly: 7.98,
-      yearly: 76.98,
-    },
     description: "Best for businesses and power users",
     ctaText: "Upgrade to Max",
+    billingPeriod: "monthly",
+  },
+  {
+    key: "ExcelFormulaGPT MAX YEARLY",
+    name: "Max",
+    description: "Best for businesses and power users",
+    ctaText: "Upgrade to Max",
+    billingPeriod: "yearly",
   },
 ];
 
@@ -121,8 +129,44 @@ export function getPlanFeatures(planName: string): string[] {
   return Array.from(features);
 }
 
-export default function PricingSectionCards() {
+export function PricingSectionCards({
+  pricingPlans,
+}: {
+  pricingPlans: (typeof plans.$inferSelect)[];
+}) {
   const [isYearly, setIsYearly] = useState(true);
+
+  // Filter config based on billing period
+  const filteredConfig = PLAN_CONFIG.filter(
+    (config) =>
+      !config.billingPeriod || // Include Free plan (no billing period)
+      (isYearly
+        ? config.billingPeriod === "yearly"
+        : config.billingPeriod === "monthly"),
+  );
+
+  // Map through config to find matching plans
+  const mergedPlans = filteredConfig.map((config) => {
+    const plan = pricingPlans.find(
+      (p) =>
+        config.key === p.name || (config.name === "Free" && p.name === "Free"),
+    );
+
+    if (!plan && config.name !== "Free") {
+      console.warn(`No plan found for config: ${config.key}`);
+    }
+    const price = parseFloat(plan?.price || "0") / 100;
+
+    return {
+      name: config.name,
+      price: config.billingPeriod === "yearly" ? price / 12 : price,
+      description: config.description,
+      ctaText: config.ctaText,
+      popular: config.popular || false,
+      features: getPlanFeatures(config.name),
+      variantId: plan?.variantId,
+    };
+  });
 
   return (
     <div className="container py-24 lg:py-32">
@@ -157,12 +201,9 @@ export default function PricingSectionCards() {
       {/* Pricing Cards */}
       <div className="mx-auto max-w-5xl">
         <div className="grid h-full gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {pricingPlans.map((plan) => (
+          {mergedPlans.map((plan) => (
             <div key={plan.name} className="h-full">
-              <PriceCard
-                plan={{ ...plan, features: getPlanFeatures(plan.name) }}
-                isYearly={isYearly}
-              />
+              <PriceCard plan={plan} />
             </div>
           ))}
         </div>

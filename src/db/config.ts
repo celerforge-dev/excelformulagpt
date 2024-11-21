@@ -1,4 +1,4 @@
-import * as schema from "@/lib/drizzle";
+import * as schema from "@/db/schema";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { env } from "~/env";

@@ -1,8 +1,11 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
   integer,
+  jsonb,
   pgTable,
   primaryKey,
+  serial,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
@@ -85,25 +88,72 @@ export const authenticators = pgTable(
   }),
 );
 
+export const plans = pgTable("plan", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  productId: integer("productId").notNull(),
+  productName: text("productName"),
+  variantId: integer("variantId").notNull().unique(),
+  name: text("name").notNull(),
+  tier: text("tier").notNull(),
+  description: text("description"),
+  price: text("price").notNull(),
+  isUsageBased: boolean("isUsageBased").default(false),
+  interval: text("interval"),
+  intervalCount: integer("intervalCount"),
+  trialInterval: text("trialInterval"),
+  trialIntervalCount: integer("trialIntervalCount"),
+  sort: integer("sort"),
+});
+
+export const webhookEvents = pgTable("webhookEvent", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+  eventName: text("eventName").notNull(),
+  processed: boolean("processed").default(false),
+  body: jsonb("body").notNull(),
+  processingError: text("processingError"),
+});
+
 export const subscriptions = pgTable("subscription", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
+  lemonSqueezyId: text("lemonSqueezyId").unique().notNull(),
+  orderId: integer("orderId").notNull(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  status: text("status").notNull(),
+  statusFormatted: text("statusFormatted").notNull(),
+  renewsAt: text("renewsAt"),
+  endsAt: text("endsAt"),
+  trialEndsAt: text("trialEndsAt"),
+  price: text("price").notNull(),
+  isUsageBased: boolean("isUsageBased").default(false),
+  isPaused: boolean("isPaused").default(false),
+  subscriptionItemId: serial("subscriptionItemId"),
   userId: text("userId")
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  planType: text("plan_type").notNull(),
-  startAt: timestamp("start_at", { mode: "date" }).notNull(),
-  expireAt: timestamp("expire_at", { mode: "date" }),
-  status: text("status").notNull(),
-  createdAt: timestamp("created_at", { mode: "date" })
+    .references(() => users.id),
+  planId: text("planId")
     .notNull()
-    .$defaultFn(() => new Date()),
+    .references(() => plans.id),
 });
 
-export const PLANS = {
+export const subscriptionRelations = relations(subscriptions, ({ one }) => ({
+  plan: one(plans, {
+    fields: [subscriptions.planId],
+    references: [plans.id],
+  }),
+}));
+
+export const PLAN_TIERS = {
   FREE: "free",
   PRO: "pro",
+  MAX: "max",
 } as const;
 
-export type PlanType = (typeof PLANS)[keyof typeof PLANS];
+export type PlanTier = (typeof PLAN_TIERS)[keyof typeof PLAN_TIERS];
