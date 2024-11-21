@@ -175,10 +175,6 @@ export async function storeWebhookEvent(
   eventName: string,
   body: Record<string, unknown>,
 ) {
-  if (!process.env.POSTGRES_URL) {
-    throw new Error("POSTGRES_URL is not set");
-  }
-
   const returnedValue = await db
     .insert(webhookEvents)
     .values({
