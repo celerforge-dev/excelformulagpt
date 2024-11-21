@@ -34,6 +34,12 @@ interface StorageItem<T> {
   expiry: number;
 }
 
+const STORAGE_KEYS = {
+  RECORDS: "formula-records",
+  INPUT: "formula-input",
+  USAGE: "formula-usage",
+} as const;
+
 function setWithExpiry<T>(key: string, value: T, ttl: number) {
   const item: StorageItem<T> = {
     value: value,
@@ -70,9 +76,9 @@ export function FormulaProvider({
   const [usage, setUsage] = useState<Usage | null>(null);
 
   useEffect(() => {
-    const saved = getWithExpiry<FormulaRecord[]>("formula-records");
-    const savedInput = getWithExpiry<string>("formula-input");
-    const savedUsage = getWithExpiry<Usage>("formula-usage");
+    const saved = getWithExpiry<FormulaRecord[]>(STORAGE_KEYS.RECORDS);
+    const savedInput = localStorage.getItem(STORAGE_KEYS.INPUT);
+    const savedUsage = getWithExpiry<Usage>(STORAGE_KEYS.USAGE);
 
     if (saved) {
       setRecords(saved);
@@ -86,7 +92,7 @@ export function FormulaProvider({
       getUsage().then(async (newUsage) => {
         setUsage(newUsage);
         setWithExpiry(
-          "formula-usage",
+          STORAGE_KEYS.USAGE,
           newUsage,
           await getRemainingSecondsToday(),
         );
@@ -107,7 +113,11 @@ export function FormulaProvider({
     };
     const updatedRecords = [newRecord, ...records].slice(0, maxRecords);
     setRecords(updatedRecords);
-    setWithExpiry("formula-records", updatedRecords, 7 * 24 * 60 * 60 * 1000);
+    setWithExpiry(
+      STORAGE_KEYS.RECORDS,
+      updatedRecords,
+      7 * 24 * 60 * 60 * 1000,
+    );
   }
 
   async function generate() {
@@ -127,7 +137,7 @@ export function FormulaProvider({
 
       const newUsage = await getUsage();
       setUsage(newUsage);
-      setWithExpiry("formula-usage", newUsage, 24 * 60 * 60 * 1000);
+      setWithExpiry(STORAGE_KEYS.USAGE, newUsage, 24 * 60 * 60 * 1000);
 
       return formula;
     } finally {
@@ -137,7 +147,7 @@ export function FormulaProvider({
 
   const setInputWithStorage = (newInput: string) => {
     setInput(newInput);
-    setWithExpiry("formula-input", newInput, 24 * 60 * 60 * 1000);
+    setWithExpiry(STORAGE_KEYS.INPUT, newInput, 24 * 60 * 60 * 1000);
   };
 
   if (!usage) {
