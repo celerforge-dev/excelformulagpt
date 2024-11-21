@@ -207,12 +207,6 @@ export async function processWebhookEvent(
     );
   }
 
-  if (!process.env.WEBHOOK_URL) {
-    throw new Error(
-      "Missing required WEBHOOK_URL env variable. Please, set it in your .env file.",
-    );
-  }
-
   let processingError = "";
   const eventBody = webhookEvent.body;
 
