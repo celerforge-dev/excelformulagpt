@@ -11,7 +11,7 @@ interface BlogPost {
   };
 }
 
-export function formatDate(date: string) {
+function formatDate(date: string) {
   return new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
