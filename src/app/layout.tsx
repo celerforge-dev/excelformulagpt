@@ -7,6 +7,7 @@ import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 import "@/styles/mdx.css";
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
@@ -39,6 +40,7 @@ export default async function RootLayout({
               <Toaster richColors />
             </ThemeProvider>
           </SessionProvider>
+          <Analytics />
         </body>
       </CSPostHogProvider>
     </html>
