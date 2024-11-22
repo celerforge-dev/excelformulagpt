@@ -5,7 +5,7 @@ export default async function Layout({
 }) {
   return (
     <>
-      <main className="mdx container max-w-3xl py-32">{children}</main>
+      <main className="mdx container max-w-3xl py-28">{children}</main>
     </>
   );
 }

@@ -10,7 +10,7 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const slugPath = (await params).slug;
-  const markdown = await readPageFile(`pages/${slugPath}`);
+  const markdown = await readPageFile(`blog/${slugPath}`);
 
   if (!markdown) {
     notFound();
