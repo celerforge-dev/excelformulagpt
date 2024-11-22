@@ -7,6 +7,10 @@ const footerNav = [
     title: "Resources",
     links: [
       {
+        title: "Blog",
+        href: "/blog",
+      },
+      {
         title: "Github",
         href: "https://github.com/celerforge/excelformulagpt",
       },
