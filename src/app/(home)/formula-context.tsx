@@ -1,9 +1,10 @@
 "use client";
 
 import { generateExcelFormula } from "@/actions/ai";
+import { getUserPlan } from "@/actions/subscription";
 import { Usage, getRemainingSecondsToday, getUsage } from "@/actions/usage";
 import { ExcelData } from "@/app/(home)/excel-parser";
-import { useSearchParams } from "next/navigation";
+import { PlanTier } from "@/db/schema";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface FormulaRecord {
@@ -20,11 +21,12 @@ export interface FormulaPrompt {
 
 interface FormulaContextType extends FormulaPrompt {
   records: FormulaRecord[];
-  setInput: (input: string) => void;
+  usage: Usage | null;
+  tier: PlanTier | null;
   isLoading: boolean;
+  setInput: (input: string) => void;
   setData: (data: ExcelData | null) => void;
   generate: () => Promise<string>;
-  usage: Usage | null;
 }
 
 const FormulaContext = createContext<FormulaContextType | undefined>(undefined);
@@ -38,7 +40,10 @@ const STORAGE_KEYS = {
   RECORDS: "formula-records",
   INPUT: "formula-input",
   USAGE: "formula-usage",
+  DATA: "formula-data",
+  TIER: "formula-tier",
 } as const;
+const TTL = 24 * 60 * 60 * 1000;
 
 function setWithExpiry<T>(key: string, value: T, ttl: number) {
   const item: StorageItem<T> = {
@@ -67,38 +72,50 @@ export function FormulaProvider({
   children: React.ReactNode;
   maxRecords?: number;
 }) {
-  const searchParams = useSearchParams();
-  const shouldRefreshUsage = !!searchParams.get("refresh-usage");
   const [records, setRecords] = useState<FormulaRecord[]>([]);
   const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<ExcelData | null>(null);
   const [usage, setUsage] = useState<Usage | null>(null);
+  const [tier, setTier] = useState<PlanTier | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const saved = getWithExpiry<FormulaRecord[]>(STORAGE_KEYS.RECORDS);
-    const savedInput = getWithExpiry<string>(STORAGE_KEYS.INPUT);
-    const savedUsage = getWithExpiry<Usage>(STORAGE_KEYS.USAGE);
+    async function loadFromStorage() {
+      const plan = await getUserPlan();
+      const planTier = plan?.tier;
+      const savedRecords = getWithExpiry<FormulaRecord[]>(STORAGE_KEYS.RECORDS);
+      const savedInput = getWithExpiry<string>(STORAGE_KEYS.INPUT);
+      const savedData = getWithExpiry<ExcelData>(STORAGE_KEYS.DATA);
+      const savedUsage = getWithExpiry<Usage>(STORAGE_KEYS.USAGE);
+      const savedTier = getWithExpiry<PlanTier>(STORAGE_KEYS.TIER);
+      const shouldRefreshUsage = planTier !== savedTier;
 
-    if (saved) {
-      setRecords(saved);
+      if (savedRecords) {
+        setRecords(savedRecords);
+      }
+      if (savedInput) {
+        setInput(savedInput);
+      }
+      if (savedData) {
+        setData(savedData);
+      }
+      if (savedUsage && !shouldRefreshUsage) {
+        setUsage(savedUsage);
+      } else {
+        getUsage().then(async (newUsage) => {
+          setTier(planTier);
+          setWithExpiry(STORAGE_KEYS.TIER, planTier, TTL);
+          setUsage(newUsage);
+          setWithExpiry(
+            STORAGE_KEYS.USAGE,
+            newUsage,
+            await getRemainingSecondsToday(),
+          );
+        });
+      }
     }
-    if (savedInput) {
-      setInput(savedInput);
-    }
-    if (savedUsage && !shouldRefreshUsage) {
-      setUsage(savedUsage);
-    } else {
-      getUsage().then(async (newUsage) => {
-        setUsage(newUsage);
-        setWithExpiry(
-          STORAGE_KEYS.USAGE,
-          newUsage,
-          await getRemainingSecondsToday(),
-        );
-      });
-    }
-  }, [shouldRefreshUsage]);
+    loadFromStorage();
+  }, []);
 
   function addRecord(
     promptInput: string,
@@ -113,11 +130,7 @@ export function FormulaProvider({
     };
     const updatedRecords = [newRecord, ...records].slice(0, maxRecords);
     setRecords(updatedRecords);
-    setWithExpiry(
-      STORAGE_KEYS.RECORDS,
-      updatedRecords,
-      7 * 24 * 60 * 60 * 1000,
-    );
+    setWithExpiry(STORAGE_KEYS.RECORDS, updatedRecords, TTL);
   }
 
   async function generate() {
@@ -137,7 +150,11 @@ export function FormulaProvider({
 
       const newUsage = await getUsage();
       setUsage(newUsage);
-      setWithExpiry(STORAGE_KEYS.USAGE, newUsage, 24 * 60 * 60 * 1000);
+      setWithExpiry(
+        STORAGE_KEYS.USAGE,
+        newUsage,
+        await getRemainingSecondsToday(),
+      );
 
       return formula;
     } finally {
@@ -147,39 +164,26 @@ export function FormulaProvider({
 
   const setInputWithStorage = (newInput: string) => {
     setInput(newInput);
-    setWithExpiry(STORAGE_KEYS.INPUT, newInput, 24 * 60 * 60 * 1000);
+    setWithExpiry(STORAGE_KEYS.INPUT, newInput, TTL);
   };
 
-  if (!usage) {
-    return (
-      <FormulaContext.Provider
-        value={{
-          records,
-          input,
-          setInput: setInputWithStorage,
-          isLoading,
-          data,
-          setData,
-          generate,
-          usage: usage,
-        }}
-      >
-        {children}
-      </FormulaContext.Provider>
-    );
-  }
+  const setDataWithStorage = (newData: ExcelData | null) => {
+    setData(newData);
+    setWithExpiry(STORAGE_KEYS.DATA, newData, TTL);
+  };
 
   return (
     <FormulaContext.Provider
       value={{
         records,
         input,
-        setInput: setInputWithStorage,
         isLoading,
         data,
-        setData,
-        generate,
+        tier,
         usage,
+        setInput: setInputWithStorage,
+        setData: setDataWithStorage,
+        generate,
       }}
     >
       {children}
