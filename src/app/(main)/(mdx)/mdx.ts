@@ -1,6 +1,9 @@
+import { evaluate } from "@mdx-js/mdx";
 import { promises as fs } from "fs";
 import { access, readFile } from "fs/promises";
+import { Metadata } from "next";
 import path from "path";
+import * as runtime from "react/jsx-runtime";
 
 export const PAGE_FOLDER = path.join(process.cwd(), "src", "content");
 
@@ -15,6 +18,28 @@ export async function readPageFile(slug: string) {
 
   const fileContent = await readFile(filePath, { encoding: "utf8" });
   return fileContent;
+}
+
+export interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function getPageMetadata(slug: string) {
+  const pageData = await readPageFile(slug);
+
+  if (!pageData) {
+    return {};
+  }
+
+  // @ts-expect-error - TODO: fix this
+  const { metadata } = (await evaluate(pageData, runtime)) as {
+    metadata: Metadata;
+  };
+
+  return {
+    title: metadata.title,
+    description: metadata.description,
+  };
 }
 
 export async function readAllFiles(directory: string) {
