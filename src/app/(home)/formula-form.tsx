@@ -1,9 +1,7 @@
 "use client";
 
-import { AuthDialog } from "@/app/(home)/auth-dialog";
 import { ExcelUploader } from "@/app/(home)/excel-uploader";
 import { useFormula } from "@/app/(home)/formula-context";
-import { UsageDisplay } from "@/app/(home)/usage-display";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,11 +14,17 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
-import { ComponentPropsWithoutRef, forwardRef, useEffect } from "react";
+import {
+  ComponentPropsWithoutRef,
+  forwardRef,
+  useEffect,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
+import Turnstile from "react-turnstile";
 import { toast } from "sonner";
 import * as z from "zod";
+import { env } from "~/env";
 
 const formSchema = z.object({
   input: z
@@ -59,8 +63,7 @@ const GenerateButton = forwardRef<
 
 export function FormulaForm({ className }: { className?: string }) {
   const { input, setInput, generate, isLoading } = useFormula();
-  const { data: session } = useSession();
-
+  const [token, setToken] = useState("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -74,16 +77,10 @@ export function FormulaForm({ className }: { className?: string }) {
   }, [input, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (!session) {
-      toast.error(
-        "Please sign in to use the formula generator. Sign in helps us prevent abuse and manage usage limits.",
-      );
-      return;
-    }
     if (isLoading) return;
     setInput(values.input);
     try {
-      await generate();
+      await generate(token);
       toast.success("Formula generated successfully.");
     } catch (error) {
       toast.error(
@@ -96,10 +93,11 @@ export function FormulaForm({ className }: { className?: string }) {
     <div className={cn("relative", className)}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
+          <Turnstile
+            sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+            onVerify={(token) => setToken(token)}
+          />
           <div className="w-full overflow-hidden rounded-lg border bg-white hover:shadow">
-            <div className="flex min-h-9 w-full items-center border-b px-3 text-sm text-secondary-foreground">
-              <UsageDisplay />
-            </div>
             <FormField
               control={form.control}
               name="input"
@@ -113,7 +111,7 @@ export function FormulaForm({ className }: { className?: string }) {
                         setInput(e.target.value);
                       }}
                       placeholder="Enter formula request (e.g., 'Average of B where A > 100'). Click bottom left to upload file for better AI understanding."
-                      className="focus border-none pb-12 pt-3 font-normal placeholder:text-gray-400 focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+                      className="focus h-36 border-none pb-12 pt-3 font-normal placeholder:text-gray-400 focus:outline-none focus-visible:outline-none focus-visible:ring-0"
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                           e.preventDefault();
@@ -133,10 +131,9 @@ export function FormulaForm({ className }: { className?: string }) {
           <div className="absolute bottom-0 flex items-center gap-2">
             <ExcelUploader />
           </div>
-          {session && <GenerateButton isLoading={isLoading} />}
+          <GenerateButton isLoading={isLoading} />
         </form>
       </Form>
-      {!session && <AuthDialog trigger={<GenerateButton type="button" />} />}
     </div>
   );
 }

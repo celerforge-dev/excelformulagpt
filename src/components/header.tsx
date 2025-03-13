@@ -17,11 +17,6 @@ const LINKS = [
     regex: "^/",
   },
   {
-    title: "Pricing",
-    href: "/pricing",
-    regex: "^/pricing$",
-  },
-  {
     title: "Feedback",
     isExternal: true,
     href: "https://github.com/celerforge/excelformulagpt/issues",

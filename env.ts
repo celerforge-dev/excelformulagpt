@@ -25,6 +25,8 @@ export const env = createEnv({
     AUTH_GITHUB_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
+
+    TURNSTILE_SECRET_KEY: z.string(),
   },
   /*
    * Environment variables available on the client (and server).
@@ -35,6 +37,7 @@ export const env = createEnv({
     NEXT_PUBLIC_POSTHOG_KEY: z.string(),
     NEXT_PUBLIC_POSTHOG_HOST: z.string(),
     NEXT_PUBLIC_APP_URL: z.string().url(),
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string(),
   },
   /*
    * Due to how Next.js bundles environment variables on Edge and Client,
@@ -61,8 +64,11 @@ export const env = createEnv({
     LEMONSQUEEZY_API_KEY: process.env.LEMONSQUEEZY_API_KEY,
     LEMONSQUEEZY_STORE_ID: process.env.LEMONSQUEEZY_STORE_ID,
 
+    TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
+
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
     NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
   },
 });

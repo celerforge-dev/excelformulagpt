@@ -8,6 +8,7 @@ export const siteConfig = {
     "Free AI-powered Excel formula generator. Simply describe what you want to calculate in plain language, and get the exact Excel formula you need. Save time and avoid formula errors.",
   keywords: [
     "Excel formula generator",
+    "Free Excel formula generator",
     "Excel formula AI",
     "Excel formula helper",
     "Excel formula converter",
@@ -26,7 +27,7 @@ export const siteConfig = {
     "Excel formula generator free",
     "Excel formula writing tool",
     "Excel formula maker",
-    "Excel formula AI assistant"
+    "Excel formula AI assistant",
   ],
   twitter: "https://twitter.com/chaoying972",
   domain: "excelformulagpt.com",

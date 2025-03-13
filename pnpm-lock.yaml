@@ -134,6 +134,9 @@ dependencies:
   react-timeago:
     specifier: ^7.2.0
     version: 7.2.0(react@19.0.0-rc-66855b96-20241106)
+  react-turnstile:
+    specifier: ^1.1.4
+    version: 1.1.4(react-dom@19.0.0-rc-66855b96-20241106)(react@19.0.0-rc-66855b96-20241106)
   react-wrap-balancer:
     specifier: ^1.1.1
     version: 1.1.1(react@19.0.0-rc-66855b96-20241106)
@@ -5764,6 +5767,16 @@ packages:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 19.0.0-rc-66855b96-20241106
+    dev: false
+
+  /react-turnstile@1.1.4(react-dom@19.0.0-rc-66855b96-20241106)(react@19.0.0-rc-66855b96-20241106):
+    resolution: {integrity: sha512-oluyRWADdsufCt5eMqacW4gfw8/csr6Tk+fmuaMx0PWMKP1SX1iCviLvD2D5w92eAzIYDHi/krUWGHhlfzxTpQ==}
+    peerDependencies:
+      react: '>= 16.13.1'
+      react-dom: '>= 16.13.1'
+    dependencies:
+      react: 19.0.0-rc-66855b96-20241106
+      react-dom: 19.0.0-rc-66855b96-20241106(react@19.0.0-rc-66855b96-20241106)
     dev: false
 
   /react-wrap-balancer@1.1.1(react@19.0.0-rc-66855b96-20241106):

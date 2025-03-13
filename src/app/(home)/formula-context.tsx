@@ -1,10 +1,7 @@
 "use client";
 
 import { generateExcelFormula } from "@/actions/ai";
-import { getUserPlan } from "@/actions/subscription";
-import { Usage, getRemainingSecondsToday, getUsage } from "@/actions/usage";
 import { ExcelData } from "@/app/(home)/excel-parser";
-import { PlanTier } from "@/db/schema";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface FormulaRecord {
@@ -21,12 +18,10 @@ export interface FormulaPrompt {
 
 interface FormulaContextType extends FormulaPrompt {
   records: FormulaRecord[];
-  usage: Usage | null;
-  tier: PlanTier | null;
   isLoading: boolean;
   setInput: (input: string) => void;
   setData: (data: ExcelData | null) => void;
-  generate: () => Promise<string>;
+  generate: (token: string) => Promise<string>;
 }
 
 const FormulaContext = createContext<FormulaContextType | undefined>(undefined);
@@ -39,9 +34,7 @@ interface StorageItem<T> {
 const STORAGE_KEYS = {
   RECORDS: "formula-records",
   INPUT: "formula-input",
-  USAGE: "formula-usage",
   DATA: "formula-data",
-  TIER: "formula-tier",
 } as const;
 const TTL = 24 * 60 * 60 * 1000;
 
@@ -75,20 +68,13 @@ export function FormulaProvider({
   const [records, setRecords] = useState<FormulaRecord[]>([]);
   const [input, setInput] = useState("");
   const [data, setData] = useState<ExcelData | null>(null);
-  const [usage, setUsage] = useState<Usage | null>(null);
-  const [tier, setTier] = useState<PlanTier | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function loadFromStorage() {
-      const plan = await getUserPlan();
-      const planTier = plan?.tier;
       const savedRecords = getWithExpiry<FormulaRecord[]>(STORAGE_KEYS.RECORDS);
       const savedInput = getWithExpiry<string>(STORAGE_KEYS.INPUT);
       const savedData = getWithExpiry<ExcelData>(STORAGE_KEYS.DATA);
-      const savedUsage = getWithExpiry<Usage>(STORAGE_KEYS.USAGE);
-      const savedTier = getWithExpiry<PlanTier>(STORAGE_KEYS.TIER);
-      const shouldRefreshUsage = planTier !== savedTier;
 
       if (savedRecords) {
         setRecords(savedRecords);
@@ -98,20 +84,6 @@ export function FormulaProvider({
       }
       if (savedData) {
         setData(savedData);
-      }
-      if (savedUsage && !shouldRefreshUsage) {
-        setUsage(savedUsage);
-      } else {
-        getUsage().then(async (newUsage) => {
-          setTier(planTier);
-          setWithExpiry(STORAGE_KEYS.TIER, planTier, TTL);
-          setUsage(newUsage);
-          setWithExpiry(
-            STORAGE_KEYS.USAGE,
-            newUsage,
-            await getRemainingSecondsToday(),
-          );
-        });
       }
     }
     loadFromStorage();
@@ -133,13 +105,16 @@ export function FormulaProvider({
     setWithExpiry(STORAGE_KEYS.RECORDS, updatedRecords, TTL);
   }
 
-  async function generate() {
+  async function generate(token: string) {
     try {
       setIsLoading(true);
-      const { formula, error } = await generateExcelFormula({
-        input,
-        data,
-      });
+      const { formula, error } = await generateExcelFormula(
+        {
+          input,
+          data,
+        },
+        token,
+      );
 
       if (error || !formula) {
         throw new Error(error);
@@ -147,14 +122,6 @@ export function FormulaProvider({
 
       addRecord(input, formula, data);
       setInput("");
-
-      const newUsage = await getUsage();
-      setUsage(newUsage);
-      setWithExpiry(
-        STORAGE_KEYS.USAGE,
-        newUsage,
-        await getRemainingSecondsToday(),
-      );
 
       return formula;
     } finally {
@@ -179,8 +146,6 @@ export function FormulaProvider({
         input,
         isLoading,
         data,
-        tier,
-        usage,
         setInput: setInputWithStorage,
         setData: setDataWithStorage,
         generate,

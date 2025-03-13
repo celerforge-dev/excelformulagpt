@@ -1,10 +1,10 @@
 "use server";
 
-import { checkUsage, recordUsage } from "@/actions/usage";
 import { ExcelData } from "@/app/(home)/excel-parser";
 import { FormulaPrompt } from "@/app/(home)/formula-context";
 import { openrouter } from "@openrouter/ai-sdk-provider";
 import { generateText } from "ai";
+import { env } from "~/env";
 
 const SYSTEM_PROMPT = `
 You are an Excel formula expert. Your role is to generate accurate and efficient Excel formulas based on user requests.
@@ -76,12 +76,26 @@ ${columnInfo}`;
 
 export async function generateExcelFormula(
   prompt: FormulaPrompt,
+  token: string,
 ): Promise<FormulaResponse> {
-  const { error } = await checkUsage();
-  if (error) {
-    return { formula: "", error };
-  }
+  const res = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      body: new URLSearchParams({
+        secret: env.TURNSTILE_SECRET_KEY,
+        response: token,
+      }),
+    },
+  );
+  const data = await res.json();
 
+  if (!data.success) {
+    return {
+      formula: "",
+      error: "Invalid Turnstile token",
+    };
+  }
   const promptImpl = new FormulaPromptImpl(prompt.input, prompt.data);
   const fullPrompt = promptImpl.toPrompt();
 
@@ -97,7 +111,7 @@ export async function generateExcelFormula(
   }
 
   const response = await generateText({
-    model: openrouter("gpt-4o-mini"),
+    model: openrouter("x-ai/grok-2-1212"),
     system: SYSTEM_PROMPT,
     prompt: fullPrompt,
     temperature: 0.1,
@@ -112,6 +126,5 @@ export async function generateExcelFormula(
     .trim()
     .replace(/^`+|`+$/g, "") // Remove backticks if present
     .replace(/^=?\s*/, "="); // Ensure formula starts with =
-  await recordUsage();
   return { formula };
 }
