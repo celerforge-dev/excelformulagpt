@@ -21,7 +21,7 @@ import {
   useState,
 } from "react";
 import { useForm } from "react-hook-form";
-import Turnstile from "react-turnstile";
+import Turnstile, { useTurnstile } from "react-turnstile";
 import { toast } from "sonner";
 import * as z from "zod";
 import { env } from "~/env";
@@ -64,6 +64,7 @@ const GenerateButton = forwardRef<
 export function FormulaForm({ className }: { className?: string }) {
   const { input, setInput, generate, isLoading } = useFormula();
   const [token, setToken] = useState("");
+  const turnstile = useTurnstile();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -86,6 +87,8 @@ export function FormulaForm({ className }: { className?: string }) {
       toast.error(
         `${error instanceof Error ? error.message : "Unknown error"}`,
       );
+    } finally {
+      turnstile.reset();
     }
   }
 

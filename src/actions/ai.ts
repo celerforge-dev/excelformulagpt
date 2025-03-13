@@ -2,7 +2,7 @@
 
 import { ExcelData } from "@/app/(home)/excel-parser";
 import { FormulaPrompt } from "@/app/(home)/formula-context";
-import { openrouter } from "@openrouter/ai-sdk-provider";
+import { createXai } from "@ai-sdk/xai";
 import { generateText } from "ai";
 import { env } from "~/env";
 
@@ -110,8 +110,13 @@ export async function generateExcelFormula(
     };
   }
 
+  const xai = createXai({
+    apiKey: env.XAI_API_KEY,
+  });
+  const model = xai("grok-2-1212", {});
+
   const response = await generateText({
-    model: openrouter("x-ai/grok-2-1212"),
+    model: model,
     system: SYSTEM_PROMPT,
     prompt: fullPrompt,
     temperature: 0.1,
