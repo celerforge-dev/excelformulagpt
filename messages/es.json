@@ -1,0 +1,24 @@
+{
+  "/": {
+    "title": "Excel Formula GPT",
+    "description": "Describe en palabras, obtén fórmulas al instante. Gratis y preciso. Convierte tus descripciones en fórmulas de Excel funcionales en segundos.",
+    "formula": {
+      "input": {
+        "placeholder": "Ingrese solicitud de fórmula (ej., 'Promedio de B donde A > 100'). Haga clic en la parte inferior izquierda para cargar un archivo para una mejor comprensión de la IA...",
+        "submit": "Generar Fórmula"
+      },
+      "error": {
+        "tooLong": "Entrada demasiado larga ({tokens} tokens). Reduzca el número de columnas o simplifique la solicitud.",
+        "invalidToken": "Token de verificación inválido",
+        "unknown": "Ocurrió un error desconocido"
+      }
+    }
+  },
+  "error": {
+    "title": "¡Algo salió mal!",
+    "description": "Lo sentimos, pero ocurrió un error al procesar su solicitud. Por favor, inténtelo de nuevo o regrese a la página de inicio.",
+    "tryAgain": "Intentar de nuevo",
+    "goHome": "Ir al inicio",
+    "errorId": "ID de error"
+  }
+}

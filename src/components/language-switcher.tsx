@@ -15,6 +15,21 @@ import { useParams } from "next/navigation";
 const LANGUAGE_MAP: Record<string, { label: string; flag: string }> = {
   en: { label: "English", flag: "🇺🇸" },
   zh: { label: "中文", flag: "🇨🇳" },
+  es: { label: "Español", flag: "🇪🇸" },
+  fr: { label: "Français", flag: "🇫🇷" },
+  de: { label: "Deutsch", flag: "🇩🇪" },
+  ja: { label: "日本語", flag: "🇯🇵" },
+  ko: { label: "한국어", flag: "🇰🇷" },
+  ru: { label: "Русский", flag: "🇷🇺" },
+  it: { label: "Italiano", flag: "🇮🇹" },
+  pt: { label: "Português", flag: "🇵🇹" },
+  "pt-BR": { label: "Português (Brasil)", flag: "🇧🇷" },
+  "es-CL": { label: "Español (Chile)", flag: "🇨🇱" },
+  nl: { label: "Nederlands", flag: "🇳🇱" },
+  ur: { label: "اردو", flag: "🇵🇰" },
+  tr: { label: "Türkçe", flag: "🇹🇷" },
+  id: { label: "Bahasa Indonesia", flag: "🇮🇩" },
+  ar: { label: "العربية", flag: "🇸🇦" },
 };
 
 export function LanguageSwitcher() {

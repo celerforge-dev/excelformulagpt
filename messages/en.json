@@ -13,5 +13,12 @@
         "unknown": "An unknown error occurred"
       }
     }
+  },
+  "error": {
+    "title": "Something went wrong!",
+    "description": "We're sorry, but an error occurred while processing your request. Please try again or return to the home page.",
+    "tryAgain": "Try Again",
+    "goHome": "Go Home",
+    "errorId": "Error ID"
   }
 }

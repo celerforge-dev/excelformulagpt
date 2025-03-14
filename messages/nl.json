@@ -1,0 +1,24 @@
+{
+  "/": {
+    "title": "Excel Formula GPT",
+    "description": "Beschrijf in woorden, krijg formules direct. Gratis en nauwkeurig. Zet je beschrijvingen om in werkende Excel-formules binnen enkele seconden.",
+    "formula": {
+      "input": {
+        "placeholder": "Voer een formule-aanvraag in (bijv. 'Gemiddelde van B waar A > 100'). Klik linksonder om een bestand te uploaden voor beter AI-begrip...",
+        "submit": "Genereer Formule"
+      },
+      "error": {
+        "tooLong": "Invoer te lang ({tokens} tokens). Verminder het aantal kolommen of vereenvoudig de aanvraag.",
+        "invalidToken": "Ongeldige verificatietoken",
+        "unknown": "Er is een onbekende fout opgetreden"
+      }
+    }
+  },
+  "error": {
+    "title": "Er is iets misgegaan!",
+    "description": "Het spijt ons, maar er is een fout opgetreden bij het verwerken van uw verzoek. Probeer het opnieuw of ga terug naar de startpagina.",
+    "tryAgain": "Opnieuw proberen",
+    "goHome": "Naar startpagina",
+    "errorId": "Fout-ID"
+  }
+}

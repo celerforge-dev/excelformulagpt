@@ -1,0 +1,24 @@
+{
+  "/": {
+    "title": "Excel Formula GPT",
+    "description": "Kelimelerle tanımlayın, formülleri anında alın. Ücretsiz ve doğru. Açıklamalarınızı saniyeler içinde çalışan Excel formüllerine dönüştürün.",
+    "formula": {
+      "input": {
+        "placeholder": "Formül isteği girin (örn. 'A > 100 olan B'nin ortalaması'). Yapay zekanın daha iyi anlaması için sol alt köşeye tıklayarak dosya yükleyin...",
+        "submit": "Formül Oluştur"
+      },
+      "error": {
+        "tooLong": "Giriş çok uzun ({tokens} token). Lütfen sütun sayısını azaltın veya isteği basitleştirin.",
+        "invalidToken": "Geçersiz doğrulama belirteci",
+        "unknown": "Bilinmeyen bir hata oluştu"
+      }
+    }
+  },
+  "error": {
+    "title": "Bir şeyler yanlış gitti!",
+    "description": "Üzgünüz, ancak isteğiniz işlenirken bir hata oluştu. Lütfen tekrar deneyin veya ana sayfaya dönün.",
+    "tryAgain": "Tekrar Dene",
+    "goHome": "Ana Sayfaya Git",
+    "errorId": "Hata ID"
+  }
+}

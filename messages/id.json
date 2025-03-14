@@ -1,0 +1,24 @@
+{
+  "/": {
+    "title": "Excel Formula GPT",
+    "description": "Jelaskan dengan kata-kata, dapatkan rumus secara instan. Gratis dan akurat. Ubah deskripsi Anda menjadi rumus Excel yang berfungsi dalam hitungan detik.",
+    "formula": {
+      "input": {
+        "placeholder": "Masukkan permintaan rumus (mis., 'Rata-rata B di mana A > 100'). Klik kiri bawah untuk mengunggah file agar AI lebih memahami...",
+        "submit": "Buat Rumus"
+      },
+      "error": {
+        "tooLong": "Input terlalu panjang ({tokens} token). Harap kurangi jumlah kolom atau sederhanakan permintaan.",
+        "invalidToken": "Token verifikasi tidak valid",
+        "unknown": "Terjadi kesalahan yang tidak diketahui"
+      }
+    }
+  },
+  "error": {
+    "title": "Terjadi kesalahan!",
+    "description": "Maaf, terjadi kesalahan saat memproses permintaan Anda. Silakan coba lagi atau kembali ke halaman utama.",
+    "tryAgain": "Coba Lagi",
+    "goHome": "Ke Beranda",
+    "errorId": "ID Kesalahan"
+  }
+}
