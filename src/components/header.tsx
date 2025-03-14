@@ -3,6 +3,7 @@
 import { Icons } from "@/components/icons";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import { UserDropdownMenu } from "@/components/user-menu";
 import useHighlight from "@/hooks/use-highlight";
 import { cn } from "@/lib/utils";
@@ -93,6 +94,7 @@ export function Header({ className }: { className?: string }) {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeSwitcher />
           <LanguageSwitcher />
           <div className="flex w-52 flex-row-reverse">
             {session?.user ? (

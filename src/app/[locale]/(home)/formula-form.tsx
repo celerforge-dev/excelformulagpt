@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 import {
   ComponentPropsWithoutRef,
   forwardRef,
@@ -66,6 +67,7 @@ export function FormulaForm({ className }: { className?: string }) {
   const { input, setInput, generate, isLoading } = useFormula();
   const [token, setToken] = useState("");
   const turnstile = useTurnstile();
+  const { theme } = useTheme();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -105,6 +107,7 @@ export function FormulaForm({ className }: { className?: string }) {
           <Turnstile
             sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
             onVerify={(token) => setToken(token)}
+            theme={theme as "light" | "dark" | "auto"}
           />
           <div className="w-full overflow-hidden rounded-lg border bg-white hover:shadow">
             <FormField
@@ -120,7 +123,7 @@ export function FormulaForm({ className }: { className?: string }) {
                         setInput(e.target.value);
                       }}
                       placeholder={t("formula.input.placeholder")}
-                      className="focus h-36 border-none pb-12 pt-3 font-normal text-foreground placeholder:text-gray-400 focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+                      className="focus h-36 border-none pb-12 pt-3 font-normal text-foreground placeholder:text-gray-400 focus:outline-none focus-visible:outline-none focus-visible:ring-0 dark:bg-neutral-900"
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                           e.preventDefault();

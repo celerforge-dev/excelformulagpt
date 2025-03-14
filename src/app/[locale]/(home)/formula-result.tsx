@@ -30,7 +30,7 @@ function FormulaResultCard({
 }: FormulaCardProps) {
   return (
     <div className="mt-2">
-      <div className="rounded-lg border bg-white p-3 hover:shadow">
+      <div className="rounded-lg border bg-white p-3 hover:shadow dark:bg-neutral-900">
         <div className="flex justify-between">
           <div>
             <div className="flex items-center gap-2">
@@ -65,17 +65,21 @@ function FormulaResultCard({
 export function FormulaResultSkeleton({ input }: { input: string }) {
   const actions = (
     <>
-      <div className="mr-2 h-6 w-6 animate-pulse rounded bg-gray-200" />
-      <div className="h-6 w-6 animate-pulse rounded bg-gray-200" />
+      <div className="mr-2 h-6 w-6 animate-pulse rounded bg-gray-200 dark:bg-neutral-900" />
+      <div className="h-6 w-6 animate-pulse rounded bg-gray-200 dark:bg-neutral-900" />
     </>
   );
 
   return (
     <FormulaResultCard
       input={input}
-      timestamp={<div className="h-3 w-16 animate-pulse rounded bg-gray-200" />}
+      timestamp={
+        <div className="h-3 w-16 animate-pulse rounded bg-gray-200 dark:bg-neutral-900" />
+      }
       actions={actions}
-      result={<div className="h-5 animate-pulse rounded bg-gray-200" />}
+      result={
+        <div className="h-5 animate-pulse rounded bg-gray-200 dark:bg-neutral-900" />
+      }
     />
   );
 }

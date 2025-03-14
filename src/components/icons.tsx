@@ -9,11 +9,14 @@ import {
   ExternalLink,
   FileUp,
   Github,
+  Laptop,
   Loader,
   LucideIcon,
   LucideProps,
   Minus,
+  Moon,
   RefreshCw,
+  Sun,
   X,
 } from "lucide-react";
 import { FC, SVGProps } from "react";
@@ -54,4 +57,7 @@ export const Icons: Record<string, Icon> = {
   circleCheck: CircleCheck,
   minus: Minus,
   chevronDown: ChevronDown,
+  sun: Sun,
+  moon: Moon,
+  laptop: Laptop,
 };
