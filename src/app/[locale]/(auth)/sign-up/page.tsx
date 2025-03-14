@@ -1,5 +1,5 @@
-import { AuthHeader } from "@/app/(auth)/header";
-import { OauthSection } from "@/app/(auth)/oauth-section";
+import { AuthHeader } from "@/app/[locale]/(auth)/header";
+import { OauthSection } from "@/app/[locale]/(auth)/oauth-section";
 import { siteConfig } from "@/config/site";
 import Link from "next/link";
 

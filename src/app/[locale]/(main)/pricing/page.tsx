@@ -1,5 +1,5 @@
 import { syncPlans } from "@/actions/lemonsqueezy";
-import { PricingSectionCards } from "@/app/(main)/pricing/plan";
+import { PricingSectionCards } from "@/app/[locale]/(main)/pricing/plan";
 import { db } from "@/db/config";
 import { plans } from "@/db/schema";
 

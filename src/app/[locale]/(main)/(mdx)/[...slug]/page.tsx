@@ -5,8 +5,8 @@ import {
   getPageMetadata,
   PageProps,
   readPageFile,
-} from "@/app/(main)/(mdx)/mdx";
-import { MDXPage } from "@/app/(main)/(mdx)/mdx-page";
+} from "@/app/[locale]/(main)/(mdx)/mdx";
+import { MDXPage } from "@/app/[locale]/(main)/(mdx)/mdx-page";
 import { Metadata } from "next";
 
 export async function generateMetadata({

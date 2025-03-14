@@ -1,6 +1,7 @@
 "use client";
 
 import { Icons } from "@/components/icons";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { UserDropdownMenu } from "@/components/user-menu";
 import useHighlight from "@/hooks/use-highlight";
@@ -91,28 +92,31 @@ export function Header({ className }: { className?: string }) {
             </nav>
           </div>
         </div>
-        <div className="flex w-36 flex-row-reverse">
-          {session?.user ? (
-            <UserDropdownMenu user={session.user} />
-          ) : (
-            <div className="flex items-center gap-2 text-sm">
-              <Link
-                href="/sign-in"
-                className="w-16 text-secondary-foreground hover:text-foreground"
-              >
-                Sign in
-              </Link>
-              <Link
-                href="/sign-up"
-                className="flex h-8 w-28 items-center justify-center rounded-full border border-secondary-foreground text-foreground transition-all hover:border-foreground"
-              >
-                <div className="flex items-center gap-1">
-                  <span>Sign up</span>
-                  <Icons.arrowRight size={16} />
-                </div>
-              </Link>
-            </div>
-          )}
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          <div className="flex w-52 flex-row-reverse">
+            {session?.user ? (
+              <UserDropdownMenu user={session.user} />
+            ) : (
+              <div className="flex items-center gap-2 text-sm">
+                <Link
+                  href="/sign-in"
+                  className="w-16 text-secondary-foreground hover:text-foreground"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="flex h-8 w-28 items-center justify-center rounded-full border border-secondary-foreground text-foreground transition-all hover:border-foreground"
+                >
+                  <div className="flex items-center gap-1">
+                    <span>Sign up</span>
+                    <Icons.arrowRight size={16} />
+                  </div>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>

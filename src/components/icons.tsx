@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   Check,
+  ChevronDown,
   CircleCheck,
   CirclePlus,
   Copy,
@@ -52,4 +53,5 @@ export const Icons: Record<string, Icon> = {
   x: X,
   circleCheck: CircleCheck,
   minus: Minus,
+  chevronDown: ChevronDown,
 };

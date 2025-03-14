@@ -1,4 +1,4 @@
-import { readAllFiles } from "@/app/(main)/(mdx)/mdx";
+import { readAllFiles } from "@/app/[locale]/(main)/(mdx)/mdx";
 import { siteConfig } from "@/config/site";
 import { MetadataRoute } from "next";
 

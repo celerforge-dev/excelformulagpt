@@ -1,4 +1,4 @@
-import { readAllFiles } from "@/app/(main)/(mdx)/mdx";
+import { readAllFiles } from "@/app/[locale]/(main)/(mdx)/mdx";
 import { evaluate } from "@mdx-js/mdx";
 import { type Metadata } from "next";
 import Link from "next/link";

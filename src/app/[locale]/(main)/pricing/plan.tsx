@@ -1,6 +1,6 @@
 "use client";
 
-import { ComparisonTable } from "@/app/(main)/pricing/comparison-table";
+import { ComparisonTable } from "@/app/[locale]/(main)/pricing/comparison-table";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";

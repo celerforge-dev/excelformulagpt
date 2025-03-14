@@ -1,7 +1,7 @@
 "use client";
 
-import { OauthSection } from "@/app/(auth)/oauth-section";
-import { getPlanFeatures } from "@/app/(main)/pricing/plan";
+import { OauthSection } from "@/app/[locale]/(home)/oauth-section";
+import { getPlanFeatures } from "@/app/[locale]/(main)/pricing/plan";
 import {
   Dialog,
   DialogContent,
