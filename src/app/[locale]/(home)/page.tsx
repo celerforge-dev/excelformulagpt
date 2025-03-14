@@ -2,9 +2,17 @@ import { FormulaSection } from "@/app/[locale]/(home)/formula-section";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { useTranslations } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
+import { use } from "react";
 
-export default function Home() {
+export default function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const t = useTranslations("/");
+  const { locale } = use(params);
+  setRequestLocale(locale);
   return (
     <>
       <div className="min-h-screen">

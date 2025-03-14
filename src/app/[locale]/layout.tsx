@@ -11,6 +11,7 @@ import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
 
@@ -19,6 +20,10 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   keywords: siteConfig.keywords,
 };
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 export default async function LocaleLayout({
   children,
@@ -30,6 +35,7 @@ export default async function LocaleLayout({
   const session = await auth();
   // Ensure that the incoming `locale` is valid
   const { locale } = await params;
+  setRequestLocale(locale);
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
