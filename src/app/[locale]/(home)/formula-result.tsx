@@ -42,7 +42,7 @@ function FormulaResultCard({
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <span className="cursor-default text-xs text-gray-500">
+                  <span className="cursor-default text-xs text-gray-500 dark:text-gray-950">
                     {input?.length > 40 ? `${input.slice(0, 40)}...` : input}
                   </span>
                 </TooltipTrigger>

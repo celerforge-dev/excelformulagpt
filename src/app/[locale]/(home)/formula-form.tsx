@@ -120,7 +120,7 @@ export function FormulaForm({ className }: { className?: string }) {
                         setInput(e.target.value);
                       }}
                       placeholder={t("formula.input.placeholder")}
-                      className="focus h-36 border-none pb-12 pt-3 font-normal placeholder:text-gray-400 focus:outline-none focus-visible:outline-none focus-visible:ring-0"
+                      className="focus h-36 border-none pb-12 pt-3 font-normal text-foreground placeholder:text-gray-400 focus:outline-none focus-visible:outline-none focus-visible:ring-0"
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {
                           e.preventDefault();
