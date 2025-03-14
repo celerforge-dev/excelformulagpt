@@ -1,0 +1,17 @@
+{
+  "/": {
+    "title": "Excel Formula GPT",
+    "description": "Describe in words, get formulas instantly. Free & accurate. Turn your descriptions into working Excel formulas in seconds.",
+    "formula": {
+      "input": {
+        "placeholder": "Enter formula request (e.g., 'Average of B where A > 100'). Click bottom left to upload file for better AI understanding...",
+        "submit": "Generate Formula"
+      },
+      "error": {
+        "tooLong": "Input too long ({tokens} tokens). Please reduce the number of columns or simplify the request.",
+        "invalidToken": "Invalid verification token",
+        "unknown": "An unknown error occurred"
+      }
+    }
+  }
+}

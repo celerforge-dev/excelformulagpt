@@ -1,7 +1,7 @@
 "use client";
 
 import { generateExcelFormula } from "@/actions/ai";
-import { ExcelData } from "@/app/(home)/excel-parser";
+import { ExcelData } from "@/app/[locale]/(home)/excel-parser";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface FormulaRecord {
@@ -108,7 +108,7 @@ export function FormulaProvider({
   async function generate(token: string) {
     try {
       setIsLoading(true);
-      const { formula, error } = await generateExcelFormula(
+      const { formula, error, errorValues } = await generateExcelFormula(
         {
           input,
           data,
@@ -117,7 +117,7 @@ export function FormulaProvider({
       );
 
       if (error || !formula) {
-        throw new Error(error);
+        throw new Error(error, { cause: errorValues });
       }
 
       addRecord(input, formula, data);

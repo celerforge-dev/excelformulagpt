@@ -1,7 +1,7 @@
 "use client";
 
-import { ExcelUploader } from "@/app/(home)/excel-uploader";
-import { useFormula } from "@/app/(home)/formula-context";
+import { ExcelUploader } from "@/app/[locale]/(home)/excel-uploader";
+import { useFormula } from "@/app/[locale]/(home)/formula-context";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +14,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import {
   ComponentPropsWithoutRef,
   forwardRef,
@@ -84,13 +85,18 @@ export function FormulaForm({ className }: { className?: string }) {
       await generate(token);
       toast.success("Formula generated successfully.");
     } catch (error) {
-      toast.error(
-        `${error instanceof Error ? error.message : "Unknown error"}`,
-      );
+      if (error instanceof Error) {
+        const errorKey = error.message;
+        const values = error.cause as { tokens?: number } | undefined;
+        toast.error(t(errorKey, values || {}));
+      } else {
+        toast.error(t("formula.error.unknown"));
+      }
     } finally {
       turnstile.reset();
     }
   }
+  const t = useTranslations("/");
 
   return (
     <div className={cn("relative", className)}>
@@ -113,7 +119,7 @@ export function FormulaForm({ className }: { className?: string }) {
                         field.onChange(e);
                         setInput(e.target.value);
                       }}
-                      placeholder="Enter formula request (e.g., 'Average of B where A > 100'). Click bottom left to upload file for better AI understanding."
+                      placeholder={t("formula.input.placeholder")}
                       className="focus h-36 border-none pb-12 pt-3 font-normal placeholder:text-gray-400 focus:outline-none focus-visible:outline-none focus-visible:ring-0"
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && !e.shiftKey) {

@@ -1,6 +1,9 @@
 "use client";
 
-import { FormulaRecord, useFormula } from "@/app/(home)/formula-context";
+import {
+  FormulaRecord,
+  useFormula,
+} from "@/app/[locale]/(home)/formula-context";
 import { CopyButton } from "@/components/copy-button";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";

@@ -1,0 +1,17 @@
+{
+  "/": {
+    "title": "Excel公式GPT",
+    "description": "描述您想要计算的内容，立即获取公式。免费且准确。将您的描述转换为Excel公式只需几秒钟。",
+    "formula": {
+      "input": {
+        "placeholder": "输入公式请求（例如，'B列中A>100的平均值'）。点击左下角上传文件以更好地理解AI...",
+        "submit": "生成公式"
+      },
+      "error": {
+        "tooLong": "输入太长（{tokens}个标记）。请减少列数或简化请求。",
+        "invalidToken": "无效的验证令牌",
+        "unknown": "发生未知错误"
+      }
+    }
+  }
+}

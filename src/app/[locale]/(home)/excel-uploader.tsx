@@ -1,5 +1,5 @@
-import { ExcelData, ExcelParser } from "@/app/(home)/excel-parser";
-import { useFormula } from "@/app/(home)/formula-context";
+import { ExcelData, ExcelParser } from "@/app/[locale]/(home)/excel-parser";
+import { useFormula } from "@/app/[locale]/(home)/formula-context";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {

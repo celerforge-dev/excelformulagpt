@@ -1,11 +1,14 @@
 "use client";
 
-import { FormulaProvider, useFormula } from "@/app/(home)/formula-context";
-import { FormulaForm } from "@/app/(home)/formula-form";
+import {
+  FormulaProvider,
+  useFormula,
+} from "@/app/[locale]/(home)/formula-context";
+import { FormulaForm } from "@/app/[locale]/(home)/formula-form";
 import {
   FormulaResult,
   FormulaResultSkeleton,
-} from "@/app/(home)/formula-result";
+} from "@/app/[locale]/(home)/formula-result";
 
 function FormulaResultList() {
   const { records, isLoading, input } = useFormula();

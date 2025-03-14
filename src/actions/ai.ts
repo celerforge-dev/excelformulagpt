@@ -1,7 +1,7 @@
 "use server";
 
-import { ExcelData } from "@/app/(home)/excel-parser";
-import { FormulaPrompt } from "@/app/(home)/formula-context";
+import { ExcelData } from "@/app/[locale]/(home)/excel-parser";
+import { FormulaPrompt } from "@/app/[locale]/(home)/formula-context";
 import { createXai } from "@ai-sdk/xai";
 import { generateText } from "ai";
 import { env } from "~/env";
@@ -28,6 +28,7 @@ const MAX_OUTPUT_TOKENS = 500;
 type FormulaResponse = {
   formula: string;
   error?: string;
+  errorValues?: { tokens: number };
 };
 
 class FormulaPromptImpl implements FormulaPrompt {
@@ -93,7 +94,7 @@ export async function generateExcelFormula(
   if (!data.success) {
     return {
       formula: "",
-      error: "Invalid Turnstile token",
+      error: "formula.error.invalidToken",
     };
   }
   const promptImpl = new FormulaPromptImpl(prompt.input, prompt.data);
@@ -106,7 +107,8 @@ export async function generateExcelFormula(
   if (estimatedTotalTokens > MAX_INPUT_TOKENS) {
     return {
       formula: "",
-      error: `Input too long (${estimatedTotalTokens} tokens). Please reduce the number of columns or simplify the request.`,
+      error: "formula.error.tooLong",
+      errorValues: { tokens: estimatedTotalTokens },
     };
   }
 
