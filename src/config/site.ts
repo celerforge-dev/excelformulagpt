@@ -8,6 +8,7 @@ export const siteConfig = {
     "Free AI-powered Excel formula generator that converts your natural language descriptions into accurate Excel formulas instantly.",
   keywords: [
     "Excel formula generator",
+    "google sheets formula generator",
     "Free Excel formula generator",
     "excel formula for multiplication",
     "excel formula to count days from date to today automatically",
