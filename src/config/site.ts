@@ -5,7 +5,7 @@ export const siteConfig = {
   url: "excelformulagpt.com",
   title: "Excel Formula GPT - AI Excel Formula Generator",
   description:
-    "Free AI-powered Excel formula generator. Simply describe what you want to calculate in plain language, and get the exact Excel formula you need. Save time and avoid formula errors.",
+    "Free AI-powered Excel formula generator that converts your natural language descriptions into accurate Excel formulas instantly.",
   keywords: [
     "Excel formula generator",
     "Free Excel formula generator",
