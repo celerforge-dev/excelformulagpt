@@ -148,7 +148,7 @@ function generateSignature(payload: string, secret: string): string {
 export async function POST(request: Request) {
   try {
     // Get the signature from the headers
-    const receivedSignature = request.headers.get("x-creem-signature");
+    const receivedSignature = request.headers.get("creem-signature");
     if (!receivedSignature) {
       return NextResponse.json(
         { error: "Missing signature header" },

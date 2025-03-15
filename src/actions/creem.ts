@@ -59,16 +59,6 @@ export async function getProductCheckoutURL(productId: string) {
   if (!session?.user) {
     return undefined;
   }
-  console.log(
-    JSON.stringify({
-      product_id: productId,
-      request_id: uuidv4(),
-      customer: {
-        email: session.user.email,
-      },
-      success_url: `${env.NEXT_PUBLIC_APP_URL}/?checkout=true`,
-    }),
-  );
 
   // Create a checkout URL for the product
   const response = await fetch(
