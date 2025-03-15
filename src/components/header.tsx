@@ -19,6 +19,11 @@ const LINKS = [
     regex: "^/",
   },
   {
+    title: "Pricing",
+    href: "/pricing",
+    regex: "^/pricing",
+  },
+  {
     title: "Feedback",
     isExternal: true,
     href: "https://github.com/celerforge/excelformulagpt/issues",
@@ -96,11 +101,11 @@ export function Header({ className }: { className?: string }) {
         <div className="flex items-center gap-2">
           <ThemeSwitcher />
           <LanguageSwitcher />
-          <div className="flex w-52 flex-row-reverse">
+          <div className="flex flex-row-reverse">
             {session?.user ? (
               <UserDropdownMenu user={session.user} />
             ) : (
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex w-52 items-center gap-2 text-sm">
                 <Link
                   href="/sign-in"
                   className="w-16 text-secondary-foreground hover:text-foreground"

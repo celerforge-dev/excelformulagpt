@@ -18,8 +18,8 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_URL: z.string(),
     UPSTASH_REDIS_REST_TOKEN: z.string(),
 
-    LEMONSQUEEZY_API_KEY: z.string(),
-    LEMONSQUEEZY_STORE_ID: z.string(),
+    CREEM_API_KEY: z.string(),
+    CREEM_WEBHOOK_SECRET: z.string(),
 
     AUTH_GITHUB_ID: z.string(),
     AUTH_GITHUB_SECRET: z.string(),
@@ -37,6 +37,8 @@ export const env = createEnv({
   client: {
     NEXT_PUBLIC_APP_URL: z.string().url(),
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string(),
+
+    NEXT_PUBLIC_CREEM_BASE_URL: z.string().url(),
   },
   /*
    * Due to how Next.js bundles environment variables on Edge and Client,
@@ -60,9 +62,9 @@ export const env = createEnv({
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
 
-    LEMONSQUEEZY_API_KEY: process.env.LEMONSQUEEZY_API_KEY,
-    LEMONSQUEEZY_STORE_ID: process.env.LEMONSQUEEZY_STORE_ID,
-
+    NEXT_PUBLIC_CREEM_BASE_URL: process.env.NEXT_PUBLIC_CREEM_BASE_URL,
+    CREEM_API_KEY: process.env.CREEM_API_KEY,
+    CREEM_WEBHOOK_SECRET: process.env.CREEM_WEBHOOK_SECRET,
     TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
     XAI_API_KEY: process.env.XAI_API_KEY,
 

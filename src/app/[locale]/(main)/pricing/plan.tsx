@@ -4,7 +4,7 @@ import { ComparisonTable } from "@/app/[locale]/(main)/pricing/comparison-table"
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { plans } from "@/db/schema";
+import { products } from "@/db/schema";
 import { useState } from "react";
 import { PriceCard } from "./price-card";
 
@@ -21,10 +21,10 @@ const planFeatures = [
     type: "Core Features",
     features: [
       {
-        name: "AI excel formulas generations per day",
+        name: "AI excel formulas generations per month",
         free: "5",
-        pro: "100",
-        max: "1,000",
+        pro: "1000",
+        max: "10000",
       },
       {
         name: "Excel file upload",
@@ -92,8 +92,8 @@ const PLAN_CONFIG = [
 ];
 
 function formatFeatureValue(name: string, value: string) {
-  if (name.includes("per day")) {
-    return `${value} generations credits / day`;
+  if (name.includes("per month")) {
+    return `${value} generations credits / month`;
   }
   return `${name} : ${value}`;
 }
@@ -130,9 +130,9 @@ export function getPlanFeatures(planName: string): string[] {
 }
 
 export function PricingSectionCards({
-  pricingPlans,
+  pricingProducts,
 }: {
-  pricingPlans: (typeof plans.$inferSelect)[];
+  pricingProducts: (typeof products.$inferSelect)[];
 }) {
   const [isYearly, setIsYearly] = useState(true);
 
@@ -145,26 +145,33 @@ export function PricingSectionCards({
         : config.billingPeriod === "monthly"),
   );
 
-  // Map through config to find matching plans
+  // Map through config to find matching products
   const mergedPlans = filteredConfig.map((config) => {
-    const plan = pricingPlans.find(
+    const product = pricingProducts.find(
       (p) =>
         config.key === p.name || (config.name === "Free" && p.name === "Free"),
     );
 
-    if (!plan && config.name !== "Free") {
-      console.warn(`No plan found for config: ${config.key}`);
+    if (!product && config.name !== "Free") {
+      console.warn(`No product found for config: ${config.key}`);
     }
-    const price = parseFloat(plan?.price || "0") / 100;
+
+    // Use hardcoded prices based on the plan name and billing period
+    let price = 0;
+    if (config.name === "Pro") {
+      price = config.billingPeriod === "yearly" ? 3.59 : 4.49;
+    } else if (config.name === "Max") {
+      price = config.billingPeriod === "yearly" ? 6.38 : 7.98;
+    }
 
     return {
       name: config.name,
-      price: config.billingPeriod === "yearly" ? price / 12 : price,
+      price: price,
       description: config.description,
       ctaText: config.ctaText,
       popular: config.popular || false,
       features: getPlanFeatures(config.name),
-      variantId: plan?.variantId,
+      productId: product?.id,
     };
   });
 
@@ -192,7 +199,7 @@ export function PricingSectionCards({
           <Label htmlFor="billing-toggle" className="relative text-lg">
             Yearly
             <Badge className="absolute -right-24 -top-8 bg-black text-white">
-              SAVE UP TO 20%
+              SAVE 20%
             </Badge>
           </Label>
         </div>

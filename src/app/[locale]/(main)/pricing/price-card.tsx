@@ -1,4 +1,4 @@
-import { getCheckoutURL } from "@/actions/lemonsqueezy";
+import { getProductCheckoutURL } from "@/actions/creem";
 import { Icons } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import { toast } from "sonner";
 interface PricingPlan {
   name: string;
   price: number;
-  variantId?: number;
+  productId?: string;
   description: string;
   ctaText: string;
   popular?: boolean;
@@ -38,19 +38,21 @@ export function PriceCard({ plan }: PriceCardProps) {
   const { data: session } = useSession();
   const displayPrice = calculateDisplayPrice(plan.price);
   const [loading, setLoading] = useState(false);
+
   async function handleClick() {
-    if (!plan.variantId) return;
+    if (!plan.productId) return;
     if (!session?.user) {
       toast.error("Please sign in to continue.", {
         description: "You need to be signed in to create a checkout.",
       });
       return;
     }
+
     let checkoutUrl: string | undefined = "";
 
     try {
       setLoading(true);
-      checkoutUrl = await getCheckoutURL(plan.variantId, true);
+      checkoutUrl = await getProductCheckoutURL(plan.productId);
     } catch (error) {
       console.error("error", error);
       setLoading(false);
@@ -60,10 +62,12 @@ export function PriceCard({ plan }: PriceCardProps) {
     } finally {
       setLoading(false);
     }
+
     if (checkoutUrl) {
       window.open(checkoutUrl, "_blank");
     }
   }
+
   return (
     <Card
       className={cn(

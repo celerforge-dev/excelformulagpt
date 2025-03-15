@@ -1,7 +1,6 @@
 "use client";
 
 import { signOut } from "@/actions/auth";
-import ThemeSwitch from "@/components/theme-switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -54,10 +53,6 @@ export function UserDropdownMenu({ user }: UserDropdownMenuProps) {
             <span className="mr-5">Homepage</span>
           </Link>
         </DropdownMenuItem>
-        <div className="flex items-center justify-between px-2 text-sm">
-          <span className="cursor-default text-foreground">Theme</span>
-          <ThemeSwitch />
-        </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="h-8 w-52 cursor-pointer"

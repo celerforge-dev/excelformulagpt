@@ -1,7 +1,5 @@
-import { syncPlans } from "@/actions/lemonsqueezy";
+import { getProducts, syncProducts } from "@/actions/creem";
 import { PricingSectionCards } from "@/app/[locale]/(main)/pricing/plan";
-import { db } from "@/db/config";
-import { plans } from "@/db/schema";
 
 export const metadata = {
   title: "Pricing",
@@ -9,9 +7,9 @@ export const metadata = {
 };
 
 export default async function Page() {
-  let pricingPlans = await db.select().from(plans);
-  if (!pricingPlans.length) {
-    pricingPlans = await syncPlans();
+  let pricingProducts = await getProducts();
+  if (!pricingProducts.length) {
+    pricingProducts = await syncProducts(); // This will fetch from API, store, and return products
   }
-  return <PricingSectionCards pricingPlans={pricingPlans} />;
+  return <PricingSectionCards pricingProducts={pricingProducts} />;
 }

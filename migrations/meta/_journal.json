@@ -36,6 +36,13 @@
       "when": 1732189444379,
       "tag": "0004_demonic_tomas",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1742043930374,
+      "tag": "0005_majestic_thanos",
+      "breakpoints": true
     }
   ]
 }

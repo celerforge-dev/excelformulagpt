@@ -1,11 +1,9 @@
-import { relations } from "drizzle-orm";
 import {
   boolean,
   integer,
   jsonb,
   pgTable,
   primaryKey,
-  serial,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
@@ -118,37 +116,38 @@ export const webhookEvents = pgTable("webhookEvent", {
   processingError: text("processingError"),
 });
 
-export const subscriptions = pgTable("subscription", {
+export const products = pgTable("product", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  lemonSqueezyId: text("lemonSqueezyId").unique().notNull(),
-  orderId: integer("orderId").notNull(),
   name: text("name").notNull(),
-  email: text("email").notNull(),
-  status: text("status").notNull(),
-  statusFormatted: text("statusFormatted").notNull(),
-  renewsAt: text("renewsAt"),
-  endsAt: text("endsAt"),
-  trialEndsAt: text("trialEndsAt"),
-  price: text("price").notNull(),
-  isUsageBased: boolean("isUsageBased").default(false),
-  isPaused: boolean("isPaused").default(false),
-  subscriptionItemId: serial("subscriptionItemId"),
-  userId: text("userId")
-    .notNull()
-    .references(() => users.id),
-  planId: text("planId")
-    .notNull()
-    .references(() => plans.id),
+  price: integer("price").notNull(),
+  created_at: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updated_at: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
 
-export const subscriptionRelations = relations(subscriptions, ({ one }) => ({
-  plan: one(plans, {
-    fields: [subscriptions.planId],
-    references: [plans.id],
-  }),
-}));
+export const subscriptions = pgTable("subscription", {
+  id: text("id").primaryKey(),
+  user_id: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  product_id: text("product_id")
+    .notNull()
+    .references(() => products.id),
+  customer_id: text("customer_id"),
+  status: text("status").notNull(),
+  collection_method: text("collection_method"),
+  current_period_start: timestamp("current_period_start", { mode: "date" }),
+  current_period_end: timestamp("current_period_end", { mode: "date" }),
+  canceled_at: timestamp("canceled_at", { mode: "date" }),
+  last_transaction_id: text("last_transaction_id"),
+  last_transaction_date: timestamp("last_transaction_date", { mode: "date" }),
+  next_transaction_date: timestamp("next_transaction_date", { mode: "date" }),
+  metadata: jsonb("metadata"),
+  mode: text("mode"),
+  created_at: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updated_at: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
 
 export const PLAN_TIERS = {
   FREE: "free",
