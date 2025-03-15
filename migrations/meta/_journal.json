@@ -43,6 +43,13 @@
       "when": 1742043930374,
       "tag": "0005_majestic_thanos",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1742048149480,
+      "tag": "0006_stormy_iron_lad",
+      "breakpoints": true
     }
   ]
 }
