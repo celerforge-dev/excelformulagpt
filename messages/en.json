@@ -20,5 +20,10 @@
     "tryAgain": "Try Again",
     "goHome": "Go Home",
     "errorId": "Error ID"
+  },
+  "Metadata": {
+    "title": "Excel Formula GPT - AI Excel Formula Generator",
+    "description": "Free AI-powered Excel formula generator that converts your natural language descriptions into accurate Excel formulas instantly.",
+    "keywords": "Excel formula generator, Free Excel formula generator, excel formula AI, Excel formula helper, Excel formula converter, Excel formula assistant"
   }
 }

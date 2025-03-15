@@ -20,5 +20,10 @@
     "tryAgain": "Erneut versuchen",
     "goHome": "Zur Startseite",
     "errorId": "Fehler-ID"
+  },
+  "Metadata": {
+    "title": "Excel Formula GPT - KI-Excel-Formelgenerator",
+    "description": "Kostenloser KI-gesteuerter Excel-Formelgenerator, der Ihre natürlichsprachlichen Beschreibungen sofort in präzise Excel-Formeln umwandelt.",
+    "keywords": "Excel-Formelgenerator, Kostenloser Excel-Formelgenerator, Excel-Formel KI, Excel-Formelhelfer, Excel-Formelkonverter, Excel-Formelassistent"
   }
 }

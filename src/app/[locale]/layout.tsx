@@ -1,7 +1,6 @@
 import { CSPostHogProvider } from "@/components/post-hog-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { siteConfig } from "@/config/site";
 import { routing } from "@/i18n/routing";
 import { auth } from "@/lib/auth";
 import { fontSans } from "@/lib/fonts";
@@ -11,15 +10,24 @@ import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: siteConfig.title,
-  description: siteConfig.description,
-  keywords: siteConfig.keywords,
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+
+  return {
+    title: t("title"),
+    description: t("description"),
+    keywords: t("keywords"),
+  };
+}
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

@@ -20,5 +20,10 @@
     "tryAgain": "Coba Lagi",
     "goHome": "Ke Beranda",
     "errorId": "ID Kesalahan"
+  },
+  "Metadata": {
+    "title": "Excel Formula GPT - Generator Rumus Excel AI",
+    "description": "Generator rumus Excel gratis berbasis AI yang mengubah deskripsi bahasa alami Anda menjadi rumus Excel yang akurat secara instan.",
+    "keywords": "Generator rumus Excel, Generator rumus Excel gratis, rumus Excel AI, Pembantu rumus Excel, Konverter rumus Excel, Asisten rumus Excel"
   }
 }

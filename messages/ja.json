@@ -20,5 +20,10 @@
     "tryAgain": "再試行",
     "goHome": "ホームに戻る",
     "errorId": "エラーID"
+  },
+  "Metadata": {
+    "title": "Excel Formula GPT - AI Excel数式ジェネレーター",
+    "description": "自然言語の説明を瞬時に正確なExcel数式に変換する無料のAI駆動Excel数式ジェネレーター。",
+    "keywords": "Excel数式ジェネレーター, 無料Excel数式ジェネレーター, Excel数式AI, Excel数式ヘルパー, Excel数式コンバーター, Excel数式アシスタント"
   }
 }

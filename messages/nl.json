@@ -20,5 +20,10 @@
     "tryAgain": "Opnieuw proberen",
     "goHome": "Naar startpagina",
     "errorId": "Fout-ID"
+  },
+  "Metadata": {
+    "title": "Excel Formula GPT - AI Excel Formule Generator",
+    "description": "Gratis AI-gestuurde Excel formule generator die uw beschrijvingen in natuurlijke taal direct omzet in nauwkeurige Excel formules.",
+    "keywords": "Excel formule generator, Gratis Excel formule generator, Excel formule AI, Excel formule helper, Excel formule converter, Excel formule assistent"
   }
 }

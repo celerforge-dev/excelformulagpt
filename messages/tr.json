@@ -20,5 +20,10 @@
     "tryAgain": "Tekrar Dene",
     "goHome": "Ana Sayfaya Git",
     "errorId": "Hata ID"
+  },
+  "Metadata": {
+    "title": "Excel Formula GPT - AI Excel Formül Oluşturucu",
+    "description": "Doğal dil açıklamalarınızı anında doğru Excel formüllerine dönüştüren ücretsiz AI destekli Excel formül oluşturucu.",
+    "keywords": "Excel formül oluşturucu, Ücretsiz Excel formül oluşturucu, Excel formül AI, Excel formül yardımcısı, Excel formül dönüştürücü, Excel formül asistanı"
   }
 }

@@ -9,17 +9,34 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export function ThemeSwitcher() {
-  const { setTheme, theme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Only show the UI after mounting to avoid hydration errors
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    // Return a placeholder with the same dimensions during SSR
+    return (
+      <Button variant="ghost" size="icon">
+        <div className="h-5 w-5" />
+        <span className="sr-only">Toggle theme</span>
+      </Button>
+    );
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon">
-          {theme === "light" ? (
+          {resolvedTheme === "light" ? (
             <Icons.sun className="h-5 w-5" />
-          ) : theme === "dark" ? (
+          ) : resolvedTheme === "dark" ? (
             <Icons.moon className="h-5 w-5" />
           ) : (
             <Icons.laptop className="h-5 w-5" />

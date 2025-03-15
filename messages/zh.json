@@ -20,5 +20,10 @@
     "tryAgain": "重试",
     "goHome": "返回首页",
     "errorId": "错误ID"
+  },
+  "Metadata": {
+    "title": "Excel公式GPT - AI Excel公式生成器",
+    "description": "免费的AI驱动Excel公式生成器，可以即时将您的自然语言描述转换为准确的Excel公式。",
+    "keywords": "Excel公式生成器, 免费Excel公式生成器, Excel公式AI, Excel公式助手, Excel公式转换器, Excel公式助理"
   }
 }

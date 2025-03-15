@@ -9,6 +9,9 @@ export const siteConfig = {
   keywords: [
     "Excel formula generator",
     "Free Excel formula generator",
+    "excel formula for multiplication",
+    "excel formula to count days from date to today automatically",
+    "excel formula not calculating",
     "Excel formula AI",
     "Excel formula helper",
     "Excel formula converter",

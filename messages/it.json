@@ -20,5 +20,10 @@
     "tryAgain": "Riprova",
     "goHome": "Vai alla home",
     "errorId": "ID errore"
+  },
+  "Metadata": {
+    "title": "Excel Formula GPT - Generatore di Formule Excel con IA",
+    "description": "Generatore gratuito di formule Excel basato su IA che converte istantaneamente le tue descrizioni in linguaggio naturale in formule Excel accurate.",
+    "keywords": "Generatore di formule Excel, Generatore gratuito di formule Excel, formula Excel IA, Assistente formule Excel, Convertitore formule Excel, Assistente formule Excel"
   }
 }

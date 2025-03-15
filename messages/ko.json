@@ -20,5 +20,10 @@
     "tryAgain": "다시 시도",
     "goHome": "홈으로 가기",
     "errorId": "오류 ID"
+  },
+  "Metadata": {
+    "title": "Excel Formula GPT - AI Excel 수식 생성기",
+    "description": "자연어 설명을 즉시 정확한 Excel 수식으로 변환하는 무료 AI 기반 Excel 수식 생성기입니다.",
+    "keywords": "Excel 수식 생성기, 무료 Excel 수식 생성기, Excel 수식 AI, Excel 수식 도우미, Excel 수식 변환기, Excel 수식 어시스턴트"
   }
 }
