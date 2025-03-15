@@ -44,6 +44,10 @@ const footerNav = [
         title: "support@excelformulagpt.com",
         href: "#",
       },
+      {
+        title: "cal",
+        href: "https://app.cal.com/chaoying",
+      },
     ],
   },
 ];
