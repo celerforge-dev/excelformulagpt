@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { Session } from "next-auth";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { UsageMenuItem } from "./usage-display";
 
 type UserDropdownMenuProps = {
   user: NonNullable<Session["user"]>;
@@ -40,6 +41,8 @@ export function UserDropdownMenu({ user }: UserDropdownMenuProps) {
             {user.email}
           </span>
         </div>
+        <DropdownMenuSeparator />
+        <UsageMenuItem />
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild className="mb-1 h-8">
           <Link

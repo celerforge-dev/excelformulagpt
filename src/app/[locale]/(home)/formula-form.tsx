@@ -12,6 +12,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { checkAndRecordUsage } from "@/lib/usage-client";
+import { USAGE_TYPES } from "@/lib/usage-constants";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
@@ -84,6 +86,21 @@ export function FormulaForm({ className }: { className?: string }) {
     if (isLoading) return;
     setInput(values.input);
     try {
+      // 检查并记录用量
+      const usageResult = await checkAndRecordUsage(
+        USAGE_TYPES.FORMULA_GENERATION,
+      );
+
+      if (!usageResult.success) {
+        if (!usageResult.hasAvailableUsage) {
+          toast.error(t("formula.error.usageLimitExceeded"));
+          return;
+        }
+        toast.error(usageResult.error || t("formula.error.unknown"));
+        return;
+      }
+
+      // 继续生成公式
       await generate(token);
       toast.success("Formula generated successfully.");
     } catch (error) {

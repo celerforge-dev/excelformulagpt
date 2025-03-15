@@ -50,6 +50,20 @@
       "when": 1742048149480,
       "tag": "0006_stormy_iron_lad",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1742051160495,
+      "tag": "0007_swift_prima",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1742051332504,
+      "tag": "0008_dizzy_george_stacy",
+      "breakpoints": true
     }
   ]
 }

@@ -149,6 +149,21 @@ export const subscriptions = pgTable("subscription", {
   updated_at: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
 
+export const userUsage = pgTable("user_usage", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  user_id: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  usage_type: text("usage_type").notNull(), // 'formula_generation', etc.
+  usage_count: integer("usage_count").notNull().default(0),
+  usage_limit: integer("usage_limit").notNull(),
+  reset_date: timestamp("reset_date", { mode: "date" }).notNull(),
+  created_at: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updated_at: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
+});
+
 export const PLAN_TIERS = {
   FREE: "free",
   PRO: "pro",
