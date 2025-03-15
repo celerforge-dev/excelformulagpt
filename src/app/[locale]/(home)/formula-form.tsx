@@ -107,7 +107,9 @@ export function FormulaForm({ className }: { className?: string }) {
           <Turnstile
             sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
             onVerify={(token) => setToken(token)}
-            theme={theme as "light" | "dark" | "auto"}
+            theme={
+              theme === "system" ? "auto" : (theme as "light" | "dark" | "auto")
+            }
           />
           <div className="w-full overflow-hidden rounded-lg border bg-white hover:shadow">
             <FormField
