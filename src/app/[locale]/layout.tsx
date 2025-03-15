@@ -52,7 +52,7 @@ export default async function LocaleLayout({
     <html lang={locale} suppressHydrationWarning>
       <head />
       <Script
-        src="https://cloud.umami.is/script.js"
+        src={"/script.js"}
         data-website-id="15c4a70e-1a89-43c8-bb64-af985a063ca9"
         strategy="afterInteractive"
       />
