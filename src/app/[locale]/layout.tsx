@@ -1,4 +1,3 @@
-import { CSPostHogProvider } from "@/components/post-hog-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { routing } from "@/i18n/routing";
@@ -13,6 +12,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 
 export async function generateMetadata({
   params,
@@ -51,27 +51,26 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <head />
+      <Script
+        src="https://cloud.umami.is/script.js"
+        data-website-id="15c4a70e-1a89-43c8-bb64-af985a063ca9"
+        strategy="afterInteractive"
+      />
       <NextIntlClientProvider>
-        <CSPostHogProvider>
-          <body
-            className={cn(
-              "bg-background font-sans antialiased",
-              fontSans.variable,
-            )}
-          >
-            <SessionProvider session={session}>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-              >
-                <TooltipProvider>{children}</TooltipProvider>
-                <Toaster richColors />
-              </ThemeProvider>
-            </SessionProvider>
-            <Analytics />
-          </body>
-        </CSPostHogProvider>
+        <body
+          className={cn(
+            "bg-background font-sans antialiased",
+            fontSans.variable,
+          )}
+        >
+          <SessionProvider session={session}>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <TooltipProvider>{children}</TooltipProvider>
+              <Toaster richColors />
+            </ThemeProvider>
+          </SessionProvider>
+          <Analytics />
+        </body>
       </NextIntlClientProvider>
     </html>
   );
