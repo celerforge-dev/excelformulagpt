@@ -48,6 +48,10 @@ const footerNav = [
         title: "cal",
         href: "https://app.cal.com/chaoying",
       },
+      {
+        title: "evernote",
+        href: "https://share.evernote.com/note/4d52d9cb-49fb-5df7-bd24-6d3d96c53887",
+      },
     ],
   },
 ];
